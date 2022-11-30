@@ -15,9 +15,15 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
   }
 
-  getInit() async {
-    await Provider.of<LokerProdvider>(context, listen: false).getLokers();
-    Navigator.pushNamed(context, '/sign-in');
+  getInit() {
+    // await Provider.of<LokerProdvider>(context, listen: false).getLokers();
+    // Navigator.pushNamed(context, '/sign-in');
+    Future.delayed(const Duration(milliseconds: 4000), () {
+      setState(() {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/sign-in', (Route route) => false);
+      });
+    });
   }
 
   @override
@@ -26,8 +32,8 @@ class _SplashPageState extends State<SplashPage> {
       backgroundColor: backgroundColor3,
       body: Center(
         child: Container(
-          width: 130,
-          height: 150,
+          width: 200,
+          height: 200,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/SMKKESESI.png'),

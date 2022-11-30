@@ -11,7 +11,7 @@ class AuthService {
     String username,
     String password,
   }) async {
-    var url = '$baseUrl/register';
+    var url = Uri.parse('$baseUrl/register');
     var headers = {
       "Access-Control-Allow-Origin": "*", // Required for CORS support to work
       "Access-Control-Allow-Credentials":
@@ -48,7 +48,7 @@ class AuthService {
     String username,
     String password,
   }) async {
-    var url = '$baseUrl/login';
+    var url = Uri.parse('$baseUrl/login');
     var headers = {'Content-type': 'application/json'};
     var body = jsonEncode({
       'username': username,

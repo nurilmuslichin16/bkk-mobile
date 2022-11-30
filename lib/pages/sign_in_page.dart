@@ -1,7 +1,51 @@
+import 'dart:developer';
+
+import 'package:bkkmobile/main.dart';
+import 'package:bkkmobile/models/login_model.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
+  SharedPreferences preferences;
+
+  final _usernameController = TextEditingController();
+
+  final _passwordController = TextEditingController();
+
+  bool loading = false;
+
+  Future setPreferenLogin(idPelamar, namaLengkap, username, alamat, nohp, email,
+      tanggalLahir, kewarganegaraan, jurusan) async {
+    preferences = await SharedPreferences.getInstance();
+    preferences.setString('idPelamar', idPelamar);
+    preferences.setString('namaLengkap', namaLengkap);
+    preferences.setString('username', username);
+    preferences.setString('alamat', alamat);
+    preferences.setString('nohp', nohp);
+    preferences.setString('email', email);
+    preferences.setString('tanggalLahir', tanggalLahir);
+    preferences.setString('kewarganegaraan', kewarganegaraan);
+    preferences.setString('jurusan', jurusan);
+    setState(() {
+      idPelamarUser = idPelamar;
+      namaLengkapUser = namaLengkap;
+      usernameUser = username;
+      alamatUser = alamat;
+      nohpUser = nohp;
+      emailUser = email;
+      tanggalLahirUser = tanggalLahir;
+      kewarganegaraanUser = kewarganegaraan;
+      jurusanUser = jurusan;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -60,6 +104,7 @@ class SignIn extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
+                        controller: _usernameController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan username anda',
                           hintStyle: subtitleTextStyle,
@@ -110,6 +155,7 @@ class SignIn extends StatelessWidget {
                       child: TextFormField(
                         style: primaryTextStyle,
                         obscureText: true,
+                        controller: _passwordController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukan Password anda',
                           hintStyle: subtitleTextStyle,
@@ -131,8 +177,136 @@ class SignIn extends StatelessWidget {
         width: double.infinity,
         margin: EdgeInsets.only(top: 50),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
+          onPressed: () async {
+            // Navigator.pushNamed(context, '/home');
+            var username = _usernameController.text;
+            var password = _passwordController.text;
+            setState(() {
+              loading = true;
+            });
+            await LoginModel.postLogin(username, password).then((value) => {
+                  if (value.status != false)
+                    {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    SizedBox(
+                                      height: 100,
+                                      width: 100,
+                                      child: Image.asset(
+                                          "assets/images/approved.png",
+                                          fit: BoxFit.cover),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    const Text(
+                                      "Berhasil Login",
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    const Text("Selamat Anda berhasil login"),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    TextButton(
+                                        onPressed: () {
+                                          setPreferenLogin(
+                                                  value.idPelamar,
+                                                  value.namaLengkap,
+                                                  value.username,
+                                                  value.alamat,
+                                                  value.nohp,
+                                                  value.email,
+                                                  value.tanggalLahir,
+                                                  value.kewarganegaraan,
+                                                  value.jurusan)
+                                              .whenComplete(() =>
+                                                  Navigator.of(context).pop());
+                                        },
+                                        child: const Text("OK"))
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).then((value) => Navigator.of(
+                              context)
+                          .pushNamedAndRemoveUntil(
+                              '/home', (Route route) => false))
+                    }
+                  else
+                    {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    SizedBox(
+                                      height: 100,
+                                      width: 100,
+                                      child: Image.asset(
+                                          "assets/images/rejected.png",
+                                          fit: BoxFit.cover),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    const Text(
+                                      "Gagal Login",
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    Text(value.text),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text("OK"))
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
+                    }
+                });
+            setState(() {
+              loading = false;
+            });
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -140,13 +314,32 @@ class SignIn extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: Text(
-            'Login',
-            style: buttonTextStyle.copyWith(
-              fontSize: 16,
-              fontWeight: medium,
-            ),
-          ),
+          child: loading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SpinKitCircle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      size: 25.0,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Mohon menunggu...",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                )
+              : Text(
+                  'Login',
+                  style: buttonTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                ),
         ),
       );
     }
