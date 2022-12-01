@@ -1,3 +1,4 @@
+import 'package:bkkmobile/main.dart';
 import 'package:bkkmobile/providers/loker_provider.dart';
 import 'package:bkkmobile/theme.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +20,11 @@ class _SplashPageState extends State<SplashPage> {
     // await Provider.of<LokerProdvider>(context, listen: false).getLokers();
     // Navigator.pushNamed(context, '/sign-in');
     Future.delayed(const Duration(milliseconds: 4000), () {
-      setState(() {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/sign-in', (Route route) => false);
-      });
+      idPelamarUser == null
+          ? Navigator.of(context)
+              .pushNamedAndRemoveUntil('/sign-in', (Route route) => false)
+          : Navigator.of(context)
+              .pushNamedAndRemoveUntil('/home', (Route route) => false);
     });
   }
 
