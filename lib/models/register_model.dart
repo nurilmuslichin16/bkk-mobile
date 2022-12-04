@@ -31,9 +31,9 @@ class RegisterModel {
         "password": password,
         "alamat": alamat,
         "kewarganegaraan": kewarganegaraan,
-        "nohp": nohp,
+        "no_hp": nohp,
         "email": email,
-        "tanggalLahir": tanggalLahir,
+        "tanggal_lahir": tanggalLahir,
         "jurusan": jurusan
       });
 
