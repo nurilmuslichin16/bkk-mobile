@@ -1,8 +1,11 @@
 import 'dart:developer';
 
+import 'package:bkkmobile/models/register_model.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -19,6 +22,7 @@ class _SignUpState extends State<SignUp> {
   final _kewarganegaraanController = TextEditingController();
   final _noHpController = TextEditingController();
   final _emailController = TextEditingController();
+  final _tanggalLahirController = TextEditingController();
   final _jurusanController = TextEditingController();
 
   bool loading = false;
@@ -74,9 +78,9 @@ class _SignUpState extends State<SignUp> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_kartunama.png',
-                      width: 17,
+                    Icon(
+                      Icons.account_circle,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -124,9 +128,9 @@ class _SignUpState extends State<SignUp> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_user.png',
-                      width: 17,
+                    Icon(
+                      Icons.person,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -174,9 +178,9 @@ class _SignUpState extends State<SignUp> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_password.png',
-                      width: 17,
+                    Icon(
+                      Icons.lock,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -225,9 +229,9 @@ class _SignUpState extends State<SignUp> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_home.png',
-                      width: 17,
+                    Icon(
+                      Icons.place,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -275,9 +279,9 @@ class _SignUpState extends State<SignUp> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_bendera.png',
-                      width: 17,
+                    Icon(
+                      Icons.flag,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -325,9 +329,9 @@ class _SignUpState extends State<SignUp> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_hp.png',
-                      width: 17,
+                    Icon(
+                      Icons.local_phone,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -375,9 +379,9 @@ class _SignUpState extends State<SignUp> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_email.png',
-                      width: 17,
+                    Icon(
+                      Icons.email,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -388,6 +392,72 @@ class _SignUpState extends State<SignUp> {
                           hintText: 'Masukan email anda',
                           hintStyle: subtitleTextStyle,
                         ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget tanggalLahirInput() {
+      return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Tanggal Lahir',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor1,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Center(
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.date_range,
+                      size: 20.0,
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: TextFormField(
+                        style: primaryTextStyle,
+                        controller: _tanggalLahirController,
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Masukan Tanggal Lahir anda',
+                          hintStyle: subtitleTextStyle,
+                        ),
+                        onTap: () async {
+                          DateTime pickDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1945),
+                              lastDate: DateTime(2050));
+
+                          if (pickDate != null) {
+                            setState(() {
+                              _tanggalLahirController.text =
+                                  DateFormat('yyyy-MM-dd').format(pickDate);
+                            });
+                          } else {
+                            return;
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -425,9 +495,9 @@ class _SignUpState extends State<SignUp> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_jurusan.png',
-                      width: 17,
+                    Icon(
+                      Icons.lightbulb,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -455,24 +525,205 @@ class _SignUpState extends State<SignUp> {
         width: double.infinity,
         margin: EdgeInsets.only(top: 50, bottom: 10),
         child: TextButton(
-          onPressed: () {
+          onPressed: () async {
             //Navigator.pushNamed(context, '/home');
             var namaLengkap = _namaLengkapController.text;
             var username = _usernameController.text;
             var password = _passwordController.text;
             var alamat = _alamatController.text;
-            var negara = _kewarganegaraanController.text;
-            var hp = _noHpController.text;
+            var kewarganegaraan = _kewarganegaraanController.text;
+            var nohp = _noHpController.text;
             var email = _emailController.text;
+            var tanggalLahir = _tanggalLahirController.text;
             var jurusan = _jurusanController.text;
-            log('Nama Lengkap : $namaLengkap');
-            log('Username : $username');
-            log('Password : $password');
-            log('Alamat : $alamat');
-            log('Negara : $negara');
-            log('Nomer HP : $hp');
-            log('Email : $email');
-            log('Jurusan : $jurusan');
+
+            setState(() {
+              loading = true;
+            });
+
+            if (namaLengkap != "" &&
+                username != "" &&
+                password != "" &&
+                alamat != "" &&
+                kewarganegaraan != "" &&
+                nohp != "" &&
+                email != "" &&
+                tanggalLahir != "" &&
+                jurusan != "") {
+              await RegisterModel.postLogin(
+                      namaLengkap,
+                      username,
+                      password,
+                      alamat,
+                      kewarganegaraan,
+                      nohp,
+                      email,
+                      tanggalLahir,
+                      jurusan)
+                  .then((value) => {
+                        if (value.status != false)
+                          {
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          SizedBox(
+                                            height: 100,
+                                            width: 100,
+                                            child: Image.asset(
+                                                "assets/images/approved.png",
+                                                fit: BoxFit.cover),
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          const Text(
+                                            "Berhasil Registrasi",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          const Text(
+                                              "Selamat Anda berhasil registrasi. Silahkan coba login."),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("OK"))
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }).then((value) => Navigator.of(context).pop())
+                          }
+                        else
+                          {
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          SizedBox(
+                                            height: 100,
+                                            width: 100,
+                                            child: Image.asset(
+                                                "assets/images/rejected.png",
+                                                fit: BoxFit.cover),
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          const Text(
+                                            "Gagal Registrasi",
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          Text(value.text),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text("OK"))
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                })
+                          }
+                      });
+            } else {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: Image.asset("assets/images/rejected.png",
+                                  fit: BoxFit.cover),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            const Text(
+                              "Gagal Login",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Text("Form tidak boleh ada yang kosong!"),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("OK"))
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+            }
+
+            setState(() {
+              loading = false;
+            });
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -480,13 +731,32 @@ class _SignUpState extends State<SignUp> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: Text(
-            'Registrasi',
-            style: buttonTextStyle.copyWith(
-              fontSize: 16,
-              fontWeight: medium,
-            ),
-          ),
+          child: loading
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SpinKitCircle(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      size: 25.0,
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Mohon menunggu...",
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                )
+              : Text(
+                  'Registrasi',
+                  style: buttonTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: medium,
+                  ),
+                ),
         ),
       );
     }
@@ -538,6 +808,7 @@ class _SignUpState extends State<SignUp> {
               kewarganegaraanInput(),
               noHpInput(),
               emailInput(),
+              tanggalLahirInput(),
               jurusanInput(),
               signUpButton(),
               Spacer(),

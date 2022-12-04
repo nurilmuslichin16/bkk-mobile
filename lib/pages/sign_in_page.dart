@@ -96,9 +96,9 @@ class _SignInState extends State<SignIn> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_user.png',
-                      width: 17,
+                    Icon(
+                      Icons.person,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -146,9 +146,9 @@ class _SignInState extends State<SignIn> {
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/icon_password.png',
-                      width: 17,
+                    Icon(
+                      Icons.lock,
+                      size: 20.0,
                     ),
                     SizedBox(width: 16),
                     Expanded(
@@ -181,129 +181,183 @@ class _SignInState extends State<SignIn> {
             // Navigator.pushNamed(context, '/home');
             var username = _usernameController.text;
             var password = _passwordController.text;
+
             setState(() {
               loading = true;
             });
-            await LoginModel.postLogin(username, password).then((value) => {
-                  if (value.status != false)
-                    {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) {
-                            return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      width: 100,
-                                      child: Image.asset(
-                                          "assets/images/approved.png",
-                                          fit: BoxFit.cover),
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    const Text(
-                                      "Berhasil Login",
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    const Text("Selamat Anda berhasil login"),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    TextButton(
-                                        onPressed: () {
-                                          setPreferenLogin(
-                                                  value.idPelamar,
-                                                  value.namaLengkap,
-                                                  value.username,
-                                                  value.alamat,
-                                                  value.nohp,
-                                                  value.email,
-                                                  value.tanggalLahir,
-                                                  value.kewarganegaraan,
-                                                  value.jurusan)
-                                              .whenComplete(() =>
-                                                  Navigator.of(context).pop());
-                                        },
-                                        child: const Text("OK"))
-                                  ],
+
+            if (username != "" && password != "") {
+              await LoginModel.postLogin(username, password).then((value) => {
+                    if (value.status != false)
+                      {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      SizedBox(
+                                        height: 100,
+                                        width: 100,
+                                        child: Image.asset(
+                                            "assets/images/approved.png",
+                                            fit: BoxFit.cover),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      const Text(
+                                        "Berhasil Login",
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      const Text("Selamat Anda berhasil login"),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      TextButton(
+                                          onPressed: () {
+                                            setPreferenLogin(
+                                                    value.idPelamar,
+                                                    value.namaLengkap,
+                                                    value.username,
+                                                    value.alamat,
+                                                    value.nohp,
+                                                    value.email,
+                                                    value.tanggalLahir,
+                                                    value.kewarganegaraan,
+                                                    value.jurusan)
+                                                .whenComplete(() =>
+                                                    Navigator.of(context)
+                                                        .pop());
+                                          },
+                                          child: const Text("OK"))
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }).then((value) => Navigator.of(
-                              context)
-                          .pushNamedAndRemoveUntil(
-                              '/home', (Route route) => false))
-                    }
-                  else
-                    {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) {
-                            return Dialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    SizedBox(
-                                      height: 100,
-                                      width: 100,
-                                      child: Image.asset(
-                                          "assets/images/rejected.png",
-                                          fit: BoxFit.cover),
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    const Text(
-                                      "Gagal Login",
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    Text(value.text),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text("OK"))
-                                  ],
+                              );
+                            }).then((value) => Navigator.of(
+                                context)
+                            .pushNamedAndRemoveUntil(
+                                '/home', (Route route) => false))
+                      }
+                    else
+                      {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) {
+                              return Dialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      SizedBox(
+                                        height: 100,
+                                        width: 100,
+                                        child: Image.asset(
+                                            "assets/images/rejected.png",
+                                            fit: BoxFit.cover),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      const Text(
+                                        "Gagal Login",
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      Text(value.text),
+                                      const SizedBox(
+                                        height: 15,
+                                      ),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("OK"))
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          })
-                    }
-                });
+                              );
+                            })
+                      }
+                  });
+            } else {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: Image.asset("assets/images/rejected.png",
+                                  fit: BoxFit.cover),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            const Text(
+                              "Gagal Login",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Text("Username dan Password tidak boleh kosong!"),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("OK"))
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+            }
+
             setState(() {
               loading = false;
             });

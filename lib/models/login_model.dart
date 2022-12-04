@@ -46,7 +46,7 @@ class LoginModel {
 
   static Future postLogin(String username, String pass) async {
     try {
-      var uri = Uri.parse('http://192.168.100.17/bkk-smk/api/login_post');
+      var uri = Uri.parse('http://192.168.100.17:80/bkk-smk/api/login_post');
       var respone = await http.post(uri, body: {
         "username": username,
         "password": pass,
@@ -57,10 +57,10 @@ class LoginModel {
 
         return LoginModel.createObject(jsonObject);
       } else {
-        print("Can't Connect Server");
+        print("Error : Can't Connect Server");
       }
     } catch (e) {
-      print(e.toString());
+      print("Error : " + e.toString());
     }
   }
 }
