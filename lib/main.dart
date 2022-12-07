@@ -1,5 +1,6 @@
 import 'package:bkkmobile/pages/home/main_page.dart';
 import 'package:bkkmobile/pages/loker_page.dart';
+import 'package:bkkmobile/pages/profile_page%20.dart';
 import 'package:bkkmobile/pages/sign_in_page.dart';
 import 'package:bkkmobile/pages/sign_up_page.dart';
 import 'package:bkkmobile/pages/splash_page.dart';
@@ -50,6 +51,7 @@ class _MyAppState extends State<MyApp> {
           '/sign-up': (context) => SignUp(),
           '/home': (context) => MainPage(),
           '/loker': (context) => LokerPage(),
+          '/profile': (context) => ProfilePage(),
         },
       ),
     );

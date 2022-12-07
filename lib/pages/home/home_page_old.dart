@@ -1,16 +1,10 @@
 import 'package:bkkmobile/main.dart';
-import 'package:bkkmobile/models/loker_model.dart';
+import 'package:bkkmobile/pages/widgets/loker_card.dart';
 import 'package:bkkmobile/pages/widgets/loker_tile.dart';
-import 'package:bkkmobile/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -55,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               onTap: () {
-                Navigator.pushNamed(context, '/profile');
+                print("Go To Profile Page");
               },
             ),
           ],
@@ -63,7 +57,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget newArivalsTitle() {
+    Widget popularProductsTitle() {
       return Container(
         margin: EdgeInsets.only(
           top: defaultMargin,
@@ -71,7 +65,7 @@ class _HomePageState extends State<HomePage> {
           right: defaultMargin,
         ),
         child: Text(
-          'Daftar Lowongan',
+          'Loker terbaru',
           style: primaryTextStyle.copyWith(
             fontSize: 22,
             fontWeight: semiBold,
@@ -80,36 +74,35 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget newArivals() {
-      return Expanded(
-          child: FutureBuilder(
-        future: LokerModel.getListLoker(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return LokerTile(
-                    snapshot.data[index].idLoker,
-                    snapshot.data[index].namaPerusahaan,
-                    snapshot.data[index].posisi,
-                    snapshot.data[index].tanggalAkhir);
-              },
-            );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Loading();
-          } else {
-            return Loading();
-          }
-        },
-      ));
+    Widget popularProducts() {
+      return Container(
+        margin: EdgeInsets.only(top: 14),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              SizedBox(
+                width: defaultMargin,
+              ),
+              Row(
+                children: [
+                  LokerCard(),
+                  LokerCard(),
+                  LokerCard(),
+                  LokerCard(),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
-    return Column(
+    return ListView(
       children: [
         header(),
-        newArivalsTitle(),
-        newArivals(),
+        popularProductsTitle(),
+        popularProducts(),
       ],
     );
   }

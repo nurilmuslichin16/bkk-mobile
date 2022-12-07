@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bkkmobile/shared/variabel.dart';
 import 'package:http/http.dart' as http;
 
 class LoginModel {
@@ -46,7 +47,7 @@ class LoginModel {
 
   static Future postLogin(String username, String pass) async {
     try {
-      var uri = Uri.parse('http://192.168.100.17:80/bkk-smk/api/login_post');
+      var uri = Uri.parse('$baseUrl/login_post');
       var respone = await http.post(uri, body: {
         "username": username,
         "password": pass,

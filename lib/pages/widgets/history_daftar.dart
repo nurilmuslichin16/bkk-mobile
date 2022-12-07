@@ -1,7 +1,22 @@
+import 'package:bkkmobile/shared/variabel.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
 
-class HistoryDaftar extends StatelessWidget {
+class HistoryDaftar extends StatefulWidget {
+  final String idLoker;
+  final String perusahaan;
+  final String posisi;
+  final String tanggalLamar;
+  final String status;
+
+  HistoryDaftar(this.idLoker, this.perusahaan, this.posisi, this.tanggalLamar,
+      this.status);
+
+  @override
+  State<HistoryDaftar> createState() => _HistoryDaftarState();
+}
+
+class _HistoryDaftarState extends State<HistoryDaftar> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,9 +30,9 @@ class HistoryDaftar extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              'assets/images/icon_user.png',
-              width: 60,
+            child: Image.network(
+              '$baseUrlImage/perusahaan/logo-stmik-wp.png',
+              width: 80,
             ),
           ),
           SizedBox(
@@ -28,19 +43,51 @@ class HistoryDaftar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'PT. Berkah Jaya',
+                  widget.perusahaan,
                   style: primaryTextStyle.copyWith(fontWeight: semiBold),
                 ),
                 Text(
-                  'Administrator',
-                  style: subtitleTextStyle,
+                  widget.posisi,
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: subtitleColor,
+                      fontSize: 10),
                 ),
                 SizedBox(
                   height: 6,
                 ),
+                widget.status == "0"
+                    ? Text(
+                        "Dalam Proses",
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Colors.yellow[700],
+                            fontWeight: FontWeight.bold),
+                      )
+                    : widget.status == "1"
+                        ? Text(
+                            "Diterima",
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.green[700],
+                                fontWeight: FontWeight.bold),
+                          )
+                        : Text(
+                            "Ditolak",
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.red[700],
+                                fontWeight: FontWeight.bold),
+                          ),
+                SizedBox(
+                  height: 6,
+                ),
                 Text(
-                  'Tanggal daftar : 15 Februari 2022',
-                  style: subtitleTextStyle,
+                  'Tanggal daftar : ' + widget.tanggalLamar,
+                  style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: subtitleColor,
+                      fontSize: 10),
                 ),
               ],
             ),

@@ -1,45 +1,46 @@
 import 'dart:convert';
 
+import 'package:bkkmobile/main.dart';
 import 'package:bkkmobile/shared/variabel.dart';
 import 'package:http/http.dart' as http;
 
-class LokerModel {
+class HistoryLokerModel {
   String idLoker;
   String namaPerusahaan;
-  String tanggalAwal;
-  String tanggalAkhir;
+  String tanggalLamar;
   String posisi;
+  String status;
 
-  LokerModel({
+  HistoryLokerModel({
     this.idLoker,
     this.namaPerusahaan,
-    this.tanggalAwal,
-    this.tanggalAkhir,
+    this.tanggalLamar,
     this.posisi,
+    this.status,
   });
 
-  factory LokerModel.createObject(Map<String, dynamic> object) {
-    return LokerModel(
+  factory HistoryLokerModel.createObject(Map<String, dynamic> object) {
+    return HistoryLokerModel(
       idLoker: object['id_lowongan'] ?? 'empty',
       namaPerusahaan: object['nama_perusahaan'] ?? 'empty',
-      tanggalAwal: object['tanggal_mulai'] ?? 'empty',
-      tanggalAkhir: object['tanggal_akhir'] ?? 'empty',
+      tanggalLamar: object['tanggal_lamar'] ?? 'empty',
       posisi: object['posisi'] ?? 'empty',
+      status: object['status'] ?? 'empty',
     );
   }
 
-  static Future<List<LokerModel>> getListLoker() async {
+  static Future<List<HistoryLokerModel>> getHistoryListLoker() async {
     try {
-      var uri = Uri.parse('$baseUrl/new_loker');
+      var uri = Uri.parse('$baseUrl/history_loker/$idPelamarUser');
       var respone = await http.get(uri);
 
       if (respone.statusCode == 200) {
         var jsonObject = jsonDecode(respone.body);
         List<dynamic> listLoker = (jsonObject as Map<String, dynamic>)['data'];
 
-        List<LokerModel> loker = [];
+        List<HistoryLokerModel> loker = [];
         for (var i = 0; i < listLoker.length; i++) {
-          loker.add(LokerModel.createObject(listLoker[i]));
+          loker.add(HistoryLokerModel.createObject(listLoker[i]));
         }
 
         return loker;

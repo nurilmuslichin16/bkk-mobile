@@ -29,23 +29,17 @@ class _MainPageState extends State<MainPage> {
             items: [
               BottomNavigationBarItem(
                 icon: Container(
-                  margin: EdgeInsets.only(top: 20, bottom: 10),
-                  child: Image.asset(
-                    'assets/images/icon_home.png',
-                    width: 21,
-                    color: currentIndex == 0 ? primaryColor : Color(0xff808191),
-                  ),
+                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Icon(Icons.home,
+                      color: currentIndex == 0 ? primaryColor : Colors.black),
                 ),
                 label: '',
               ),
               BottomNavigationBarItem(
                 icon: Container(
                   margin: EdgeInsets.only(top: 20, bottom: 10),
-                  child: Image.asset(
-                    'assets/images/icon_bag.png',
-                    width: 20,
-                    color: currentIndex == 1 ? primaryColor : Color(0xff808191),
-                  ),
+                  child: Icon(Icons.history,
+                      color: currentIndex == 1 ? primaryColor : Colors.black),
                 ),
                 label: '',
               ),

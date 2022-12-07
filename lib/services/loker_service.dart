@@ -25,7 +25,7 @@ class LokerService {
       List<LokerModel> lokers = [];
 
       for (var item in data) {
-        lokers.add(LokerModel.fromJson(item));
+        lokers.add(LokerModel.createObject(item));
       }
 
       return lokers;

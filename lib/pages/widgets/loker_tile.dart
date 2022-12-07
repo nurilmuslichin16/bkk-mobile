@@ -1,7 +1,20 @@
+import 'package:bkkmobile/shared/variabel.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
 
-class LokerTile extends StatelessWidget {
+class LokerTile extends StatefulWidget {
+  final String foto;
+  final String perusahaan;
+  final String posisi;
+  final String tanggalAkhir;
+
+  LokerTile(this.foto, this.perusahaan, this.posisi, this.tanggalAkhir);
+
+  @override
+  State<LokerTile> createState() => _LokerTileState();
+}
+
+class _LokerTileState extends State<LokerTile> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -15,8 +28,8 @@ class LokerTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/images/SMKKESESI.png',
+              child: Image.network(
+                '$baseUrlImage/perusahaan/logo-stmik-wp.png',
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,
@@ -30,7 +43,7 @@ class LokerTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'PT maju mundur',
+                    widget.perusahaan,
                     style: secoundaryTextStyle.copyWith(
                       fontSize: 12,
                     ),
@@ -39,7 +52,7 @@ class LokerTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Operator machine',
+                    widget.posisi,
                     style: primaryTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -49,7 +62,7 @@ class LokerTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Pendaftaran : 13-20 April',
+                    'Berlaku s.d ' + widget.tanggalAkhir,
                     style: priceTextStyle.copyWith(fontWeight: medium),
                   ),
                 ],

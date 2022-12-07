@@ -1,4 +1,6 @@
+import 'package:bkkmobile/models/history_loker_model.dart';
 import 'package:bkkmobile/pages/widgets/history_daftar.dart';
+import 'package:bkkmobile/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
 
@@ -30,7 +32,7 @@ class CartPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/image_wishlist.png',
+                'assets/images/logo-stmik-wp.png',
                 width: 80,
               ),
               SizedBox(
@@ -82,22 +84,29 @@ class CartPage extends StatelessWidget {
 
     Widget content() {
       return Expanded(
-        child: Container(
-          color: backgroundColor1,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-            children: [
-              HistoryDaftar(),
-              HistoryDaftar(),
-              HistoryDaftar(),
-              HistoryDaftar(),
-              HistoryDaftar(),
-              HistoryDaftar(),
-              HistoryDaftar(),
-            ],
-          ),
-        ),
-      );
+          child: FutureBuilder(
+        future: HistoryLokerModel.getHistoryListLoker(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return HistoryDaftar(
+                    snapshot.data[index].idLoker,
+                    snapshot.data[index].namaPerusahaan,
+                    snapshot.data[index].posisi,
+                    snapshot.data[index].tanggalLamar,
+                    snapshot.data[index].status);
+              },
+              padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Loading();
+          } else {
+            return Loading();
+          }
+        },
+      ));
     }
 
     return Column(children: [

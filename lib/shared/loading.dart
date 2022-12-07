@@ -9,8 +9,8 @@ class Loading extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
           gradient: LinearGradient(colors: [
-        Color.fromRGBO(0, 180, 216, 1),
-        Color.fromRGBO(154, 220, 255, 1)
+        Color.fromARGB(255, 173, 220, 131),
+        Color.fromARGB(255, 181, 249, 185)
       ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
       child: Center(
           child: Column(

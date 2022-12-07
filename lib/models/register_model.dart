@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bkkmobile/shared/variabel.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterModel {
@@ -24,7 +25,7 @@ class RegisterModel {
       String tanggalLahir,
       String jurusan) async {
     try {
-      var uri = Uri.parse('http://192.168.100.17:80/bkk-smk/api/register_post');
+      var uri = Uri.parse('$baseUrl/register_post');
       var respone = await http.post(uri, body: {
         "nama_lengkap": namaLengkap,
         "username": username,
