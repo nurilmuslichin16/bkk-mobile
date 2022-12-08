@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
 
 class LokerTile extends StatefulWidget {
+  final String idLoker;
   final String foto;
   final String perusahaan;
   final String posisi;
   final String tanggalAkhir;
 
-  LokerTile(this.foto, this.perusahaan, this.posisi, this.tanggalAkhir);
+  LokerTile(
+      this.idLoker, this.foto, this.perusahaan, this.posisi, this.tanggalAkhir);
 
   @override
   State<LokerTile> createState() => _LokerTileState();
@@ -19,7 +21,8 @@ class _LokerTileState extends State<LokerTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/loker');
+        Navigator.pushNamed(context, '/loker',
+            arguments: {'idLoker': widget.idLoker});
       },
       child: Container(
         margin: EdgeInsets.only(

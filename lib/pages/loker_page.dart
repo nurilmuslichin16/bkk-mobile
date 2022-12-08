@@ -1,5 +1,10 @@
+import 'package:bkkmobile/models/detail_loker_model.dart';
+import 'package:bkkmobile/services/loker_service.dart';
+import 'package:bkkmobile/shared/loading.dart';
+import 'package:bkkmobile/shared/variabel.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class LokerPage extends StatefulWidget {
   @override
@@ -7,8 +12,32 @@ class LokerPage extends StatefulWidget {
 }
 
 class _LokerPageState extends State<LokerPage> {
+  DetailLokerModel detailLoker;
+  LokerService service = LokerService();
+  bool loading = true;
+  String idLoker;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getDataLoker();
+    });
+  }
+
+  getDataLoker() async {
+    detailLoker = await service.getDetailLoker(idLoker);
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final arg = (ModalRoute.of(context).settings.arguments ??
+        <String, dynamic>{}) as Map;
+    idLoker = arg['idLoker'];
+
     Future<void> showSuccessDialog() async {
       return showDialog(
         context: context,
@@ -82,13 +111,21 @@ class _LokerPageState extends State<LokerPage> {
     }
 
     Widget header() {
-      return Column(
+      return Stack(
         children: [
+          ClipRRect(
+            child: Image.network(
+              '$baseUrlImage/perusahaan/logo-stmik-wp.png',
+              width: MediaQuery.of(context).size.width,
+              height: 380,
+              fit: BoxFit.fill,
+            ),
+          ),
           Container(
             margin: EdgeInsets.only(
               top: 20,
-              left: defaultMargin,
-              right: defaultMargin,
+              left: 10,
+              right: 10,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,21 +136,10 @@ class _LokerPageState extends State<LokerPage> {
                   },
                   child: Icon(
                     Icons.chevron_left,
+                    size: 40,
                   ),
                 ),
-                Icon(
-                  Icons.shopping_bag,
-                  color: backgroundColor1,
-                ),
               ],
-            ),
-          ),
-          ClipRRect(
-            child: Image.asset(
-              'assets/images/icon_loker.png',
-              width: MediaQuery.of(context).size.width,
-              height: 310,
-              fit: BoxFit.cover,
             ),
           ),
         ],
@@ -145,17 +171,43 @@ class _LokerPageState extends State<LokerPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'PT Maju jaya sakti',
+                          detailLoker.namaPerusahaan,
                           style: primaryTextStyle.copyWith(
                               fontSize: 18, fontWeight: semiBold),
                         ),
                         Text(
-                          'Operator Mesin',
+                          detailLoker.posisi,
                           style: secoundaryTextStyle.copyWith(fontSize: 14),
                         )
                       ],
                     ),
                   ),
+                ],
+              ),
+            ),
+
+            // NOTE GAJI
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(
+                  top: 20, left: defaultMargin, right: defaultMargin),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: backgroundColor2,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Gaji',
+                    style: primaryTextStyle,
+                  ),
+                  Text(
+                    'Rp. ' + detailLoker.gaji,
+                    style: priceTextStyle.copyWith(
+                        fontSize: 16, fontWeight: semiBold),
+                  )
                 ],
               ),
             ),
@@ -174,11 +226,11 @@ class _LokerPageState extends State<LokerPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Pendaftaran',
+                    'Terakhir Pendaftaran',
                     style: primaryTextStyle,
                   ),
                   Text(
-                    '1-12 Januari 2022',
+                    detailLoker.tanggalAkhir,
                     style: priceTextStyle.copyWith(
                         fontSize: 16, fontWeight: semiBold),
                   )
@@ -201,18 +253,11 @@ class _LokerPageState extends State<LokerPage> {
                     'Description',
                     style: primaryTextStyle.copyWith(fontWeight: medium),
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum, nulla vel pellentesque consequat, ante nulla hendrerit arcu, ac tincidunt mauris lacus sed leo. vamus suscipit molestie vestibulum.',
-                    style: subtitleTextStyle.copyWith(fontWeight: light),
-                    textAlign: TextAlign.justify,
-                  ),
+                  Html(data: detailLoker.deskripsi)
                 ],
               ),
             ),
-            SizedBox(height: 60),
+            SizedBox(height: 30),
             //NOTE BUTTON
             Container(
               width: double.infinity,
@@ -249,12 +294,14 @@ class _LokerPageState extends State<LokerPage> {
 
     return Scaffold(
       backgroundColor: backgroundColor3,
-      body: ListView(
-        children: [
-          header(),
-          content(),
-        ],
-      ),
+      body: loading
+          ? Loading()
+          : ListView(
+              children: [
+                header(),
+                content(),
+              ],
+            ),
     );
   }
 }
