@@ -39,78 +39,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> showSuccessDialog() async {
-      return showDialog(
-        context: context,
-        builder: (BuildContext context) => Container(
-          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
-          child: AlertDialog(
-            backgroundColor: backgroundColor3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(Icons.close, color: primaryTextColor),
-                    ),
-                  ),
-                  Image.asset(
-                    'assets/images/icon_success.png',
-                    width: 100,
-                  ),
-                  SizedBox(height: 12),
-                  Text(
-                    'Selamat :)',
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 18,
-                      fontWeight: semiBold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    'Anda berhasil mendaftar loker ini',
-                    style: secoundaryTextStyle,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: 154,
-                    height: 44,
-                    child: TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        'Lihat history',
-                        style: primaryTextStyle.copyWith(
-                          fontSize: 16,
-                          fontWeight: medium,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
     Widget footer() {
       return Column(
         children: [
@@ -477,7 +405,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 50,
                       child: TextButton(
                         onPressed: () {
-                          showSuccessDialog();
+                          Navigator.pushNamed(context, '/ubah-profile');
                         },
                         style: TextButton.styleFrom(
                             shape: RoundedRectangleBorder(

@@ -226,7 +226,7 @@ class _UbahPasswordState extends State<UbahPassword> {
       );
     }
 
-    Widget signInButton() {
+    Widget ubahButton() {
       return Container(
         height: 50,
         width: double.infinity,
@@ -491,7 +491,7 @@ class _UbahPasswordState extends State<UbahPassword> {
                   ],
                 )
               : Text(
-                  'Login',
+                  'Ubah Password',
                   style: buttonTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -516,7 +516,7 @@ class _UbahPasswordState extends State<UbahPassword> {
               passwordLamaInput(),
               passwordBaruInput(),
               passwordBaruKonfirmInput(),
-              signInButton(),
+              ubahButton(),
             ],
           ),
         ),
