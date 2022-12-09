@@ -122,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/ubah-pass');
               },
               child: Container(
                 padding: EdgeInsets.all(20),

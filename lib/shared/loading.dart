@@ -7,17 +7,12 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: [
-        Color.fromARGB(255, 173, 220, 131),
-        Color.fromARGB(255, 181, 249, 185)
-      ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
       child: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
           SpinKitCircle(
-            color: Colors.white,
+            color: Colors.black,
             size: 100.0,
           ),
           SizedBox(
@@ -26,7 +21,7 @@ class Loading extends StatelessWidget {
           Text(
             "Mohon menunggu...",
             style: TextStyle(
-                color: Colors.white,
+                color: Colors.black,
                 fontSize: 18.0,
                 fontFamily: 'roboto',
                 fontWeight: FontWeight.bold,
