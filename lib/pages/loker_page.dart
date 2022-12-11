@@ -269,7 +269,7 @@ class _LokerPageState extends State<LokerPage> {
                       height: 54,
                       child: TextButton(
                         onPressed: () {
-                          showSuccessDialog();
+                          Navigator.pushNamed(context, '/upload-file');
                         },
                         style: TextButton.styleFrom(
                             shape: RoundedRectangleBorder(

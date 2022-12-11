@@ -6,6 +6,7 @@ import 'package:bkkmobile/pages/sign_up_page.dart';
 import 'package:bkkmobile/pages/splash_page.dart';
 import 'package:bkkmobile/pages/ubah_pass_page.dart';
 import 'package:bkkmobile/pages/ubah_profile_page.dart';
+import 'package:bkkmobile/pages/upload_file_page.dart';
 import 'package:bkkmobile/providers/loker_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,6 +54,7 @@ class _MyAppState extends State<MyApp> {
           '/sign-up': (context) => SignUp(),
           '/home': (context) => MainPage(),
           '/loker': (context) => LokerPage(),
+          '/upload-file': (context) => UploadFile(),
           '/profile': (context) => ProfilePage(),
           '/ubah-profile': (context) => UbahProfile(),
           '/ubah-pass': (context) => UbahPassword(),
