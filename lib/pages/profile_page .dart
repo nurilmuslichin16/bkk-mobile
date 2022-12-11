@@ -13,6 +13,10 @@ class _ProfilePageState extends State<ProfilePage> {
   SharedPreferences preferences;
   bool loading = false;
 
+  reloadData() {
+    setState(() {});
+  }
+
   Future logout() async {
     preferences = await SharedPreferences.getInstance();
     preferences.remove('idPelamar');
@@ -405,7 +409,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 50,
                       child: TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/ubah-profile');
+                          Navigator.pushNamed(context, '/ubah-profile')
+                              .then((value) => reloadData());
                         },
                         style: TextButton.styleFrom(
                             shape: RoundedRectangleBorder(
