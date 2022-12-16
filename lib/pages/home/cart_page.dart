@@ -96,7 +96,8 @@ class CartPage extends StatelessWidget {
                     snapshot.data[index].namaPerusahaan,
                     snapshot.data[index].posisi,
                     snapshot.data[index].tanggalLamar,
-                    snapshot.data[index].status);
+                    snapshot.data[index].status,
+                    snapshot.data[index].foto);
               },
               padding: EdgeInsets.symmetric(horizontal: defaultMargin),
             );

@@ -115,7 +115,7 @@ class _LokerPageState extends State<LokerPage> {
         children: [
           ClipRRect(
             child: Image.network(
-              '$baseUrlImage/perusahaan/logo-stmik-wp.png',
+              '$baseUrlFotoPerusahaan' + detailLoker.foto,
               width: MediaQuery.of(context).size.width,
               height: 380,
               fit: BoxFit.fill,

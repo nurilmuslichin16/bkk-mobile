@@ -10,6 +10,7 @@ class HistoryLokerModel {
   String tanggalLamar;
   String posisi;
   String status;
+  String foto;
 
   HistoryLokerModel({
     this.idLoker,
@@ -17,6 +18,7 @@ class HistoryLokerModel {
     this.tanggalLamar,
     this.posisi,
     this.status,
+    this.foto,
   });
 
   factory HistoryLokerModel.createObject(Map<String, dynamic> object) {
@@ -26,6 +28,7 @@ class HistoryLokerModel {
       tanggalLamar: object['tanggal_lamar'] ?? 'empty',
       posisi: object['posisi'] ?? 'empty',
       status: object['status'] ?? 'empty',
+      foto: object['foto'] ?? 'empty',
     );
   }
 

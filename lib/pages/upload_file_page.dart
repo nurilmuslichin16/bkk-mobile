@@ -1,8 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:bkkmobile/main.dart';
-import 'package:bkkmobile/models/ubah_pass_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
@@ -15,11 +13,10 @@ class UploadFile extends StatefulWidget {
 
 class _UploadFileState extends State<UploadFile> {
   FilePickerResult result;
-  String _fileName;
   PlatformFile pickedFile;
   File fileToDisplay;
 
-  final _passwordLamaController = TextEditingController();
+  String _fileNameSuratLamaran = '...';
 
   bool loading = false;
 
@@ -33,11 +30,11 @@ class _UploadFileState extends State<UploadFile> {
           .pickFiles(type: FileType.any, allowMultiple: false);
 
       if (result != null) {
-        _fileName = result.files.first.name;
+        _fileNameSuratLamaran = result.files.first.name;
         pickedFile = result.files.first;
         fileToDisplay = File(pickedFile.path.toString());
 
-        print("File Name : $_fileName");
+        print("File Name : $_fileNameSuratLamaran");
       }
 
       setState(() {
@@ -57,7 +54,7 @@ class _UploadFileState extends State<UploadFile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Ubah Password',
+              'Upload Berkas Lamaran',
               style: primaryTextStyle.copyWith(
                 fontSize: 24,
                 fontWeight: semiBold,
@@ -66,21 +63,21 @@ class _UploadFileState extends State<UploadFile> {
             SizedBox(
               height: 2,
             ),
-            Text('Silahkan masukkan password lama dan terbaru.',
+            Text('Silahkan upload berkas yang dibutuhkan.',
                 style: subtitleTextStyle)
           ],
         ),
       );
     }
 
-    Widget passwordLamaInput() {
+    Widget suratLamaranUpload() {
       return Container(
         margin: EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Password Lama',
+              'Surat Lamaran',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -88,35 +85,271 @@ class _UploadFileState extends State<UploadFile> {
             ),
             SizedBox(height: 12),
             Container(
-              height: 50,
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-              ),
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 20, right: 5),
               decoration: BoxDecoration(
-                color: backgroundColor1,
-                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
               ),
-              child: Center(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.lock,
-                      size: 20.0,
-                    ),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: TextFormField(
-                        style: primaryTextStyle,
-                        obscureText: true,
-                        controller: _passwordLamaController,
-                        decoration: InputDecoration.collapsed(
-                          hintText: 'Masukan Password lama anda',
-                          hintStyle: subtitleTextStyle,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _fileNameSuratLamaran,
+                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        ambilFile();
+                      },
+                      icon: Icon(Icons.upload_file_rounded))
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget daftarRiwayatUpload() {
+      return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Daftar Riwayat',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 20, right: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _fileNameSuratLamaran,
+                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        ambilFile();
+                      },
+                      icon: Icon(Icons.upload_file_rounded))
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget fotoUpload() {
+      return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Foto',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 20, right: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _fileNameSuratLamaran,
+                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        ambilFile();
+                      },
+                      icon: Icon(Icons.upload_file_rounded))
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget ktpUpload() {
+      return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'KTP',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 20, right: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _fileNameSuratLamaran,
+                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        ambilFile();
+                      },
+                      icon: Icon(Icons.upload_file_rounded))
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget skckUpload() {
+      return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'SKCK',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 20, right: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _fileNameSuratLamaran,
+                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        ambilFile();
+                      },
+                      icon: Icon(Icons.upload_file_rounded))
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget ijazahUpload() {
+      return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Ijazah',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 20, right: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _fileNameSuratLamaran,
+                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        ambilFile();
+                      },
+                      icon: Icon(Icons.upload_file_rounded))
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget sertifikatUpload() {
+      return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Sertifikat',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.only(left: 20, right: 5),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _fileNameSuratLamaran,
+                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        ambilFile();
+                      },
+                      icon: Icon(Icons.upload_file_rounded))
+                ],
               ),
             ),
           ],
@@ -128,7 +361,7 @@ class _UploadFileState extends State<UploadFile> {
       return Container(
         height: 50,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 50),
+        margin: EdgeInsets.only(top: 50, bottom: 30),
         child: TextButton(
           onPressed: () async {
             ambilFile();
@@ -159,7 +392,7 @@ class _UploadFileState extends State<UploadFile> {
                   ],
                 )
               : Text(
-                  'Ubah Password',
+                  'Upload Berkas',
                   style: buttonTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -177,11 +410,16 @@ class _UploadFileState extends State<UploadFile> {
           margin: EdgeInsets.symmetric(
             horizontal: defaultMargin,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: [
               header(),
-              passwordLamaInput(),
+              suratLamaranUpload(),
+              daftarRiwayatUpload(),
+              fotoUpload(),
+              ktpUpload(),
+              skckUpload(),
+              ijazahUpload(),
+              sertifikatUpload(),
               ubahButton(),
             ],
           ),

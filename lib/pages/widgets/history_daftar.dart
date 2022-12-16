@@ -8,9 +8,10 @@ class HistoryDaftar extends StatefulWidget {
   final String posisi;
   final String tanggalLamar;
   final String status;
+  final String foto;
 
   HistoryDaftar(this.idLoker, this.perusahaan, this.posisi, this.tanggalLamar,
-      this.status);
+      this.status, this.foto);
 
   @override
   State<HistoryDaftar> createState() => _HistoryDaftarState();
@@ -31,7 +32,7 @@ class _HistoryDaftarState extends State<HistoryDaftar> {
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Image.network(
-              '$baseUrlImage/perusahaan/logo-stmik-wp.png',
+              '$baseUrlFotoPerusahaan' + widget.foto,
               width: 80,
             ),
           ),

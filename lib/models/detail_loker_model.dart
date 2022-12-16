@@ -5,6 +5,7 @@ class DetailLokerModel {
   String posisi;
   String deskripsi;
   String gaji;
+  String foto;
 
   DetailLokerModel(
       {this.idLoker,
@@ -12,7 +13,8 @@ class DetailLokerModel {
       this.tanggalAkhir,
       this.posisi,
       this.deskripsi,
-      this.gaji});
+      this.gaji,
+      this.foto});
 
   factory DetailLokerModel.createObject(Map<String, dynamic> object) {
     return DetailLokerModel(
@@ -22,6 +24,7 @@ class DetailLokerModel {
       posisi: object['posisi'] ?? 'empty',
       deskripsi: object['deskripsi'] ?? 'empty',
       gaji: object['gaji'] ?? 'empty',
+      foto: object['foto'] ?? 'empty',
     );
   }
 }

@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index) {
                 return LokerTile(
                     snapshot.data[index].idLoker,
-                    snapshot.data[index].idLoker,
+                    snapshot.data[index].foto,
                     snapshot.data[index].namaPerusahaan,
                     snapshot.data[index].posisi,
                     snapshot.data[index].tanggalAkhir);

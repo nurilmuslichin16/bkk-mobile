@@ -32,7 +32,7 @@ class _LokerTileState extends State<LokerTile> {
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image.network(
-                '$baseUrlImage/perusahaan/logo-stmik-wp.png',
+                '$baseUrlFotoPerusahaan' + widget.foto,
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,

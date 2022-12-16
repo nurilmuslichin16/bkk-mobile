@@ -9,6 +9,7 @@ class LokerModel {
   String tanggalAwal;
   String tanggalAkhir;
   String posisi;
+  String foto;
 
   LokerModel({
     this.idLoker,
@@ -16,6 +17,7 @@ class LokerModel {
     this.tanggalAwal,
     this.tanggalAkhir,
     this.posisi,
+    this.foto,
   });
 
   factory LokerModel.createObject(Map<String, dynamic> object) {
@@ -25,6 +27,7 @@ class LokerModel {
       tanggalAwal: object['tanggal_mulai'] ?? 'empty',
       tanggalAkhir: object['tanggal_akhir'] ?? 'empty',
       posisi: object['posisi'] ?? 'empty',
+      foto: object['foto'] ?? 'empty',
     );
   }
 
