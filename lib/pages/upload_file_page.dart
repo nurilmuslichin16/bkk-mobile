@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
 
 class UploadFile extends StatefulWidget {
@@ -16,10 +17,7 @@ class UploadFile extends StatefulWidget {
 }
 
 class _UploadFileState extends State<UploadFile> {
-  FilePickerResult fileResult; // untuk mengambil filenya
-  File _file; // informasi Filenya
-  String _namaFile;
-  String _pathFile;
+  FilePickerResult _files;
 
   String _fileNameSuratLamaran = '...';
 
@@ -31,13 +29,10 @@ class _UploadFileState extends State<UploadFile> {
         loading = true;
       });
 
-      fileResult = await FilePicker.platform.pickFiles(type: FileType.any);
-      _file = File(fileResult.files.single.path);
-      _namaFile = fileResult.files.single.name;
-      _pathFile = fileResult.files.single.path;
+      _files = await FilePicker.platform.pickFiles(
+          type: FileType.any, allowMultiple: false, allowedExtensions: null);
 
-      log("File Name : $_namaFile");
-      log("FIle Path : $_pathFile");
+      print("Status : Location file is ${_files.files.first.path}");
 
       setState(() {
         loading = false;
@@ -47,24 +42,27 @@ class _UploadFileState extends State<UploadFile> {
     }
   }
 
-  void _uploadFile(File file) async {
-    var stream = http.ByteStream(file.openRead())..cast();
-    var length = await file.length();
-    var url = Uri.parse("$baseUrl/upload_file_post");
+  void _uploadFile() async {
+    setState(() {
+      loading = true;
+    });
 
-    var request = http.MultipartRequest("POST", url);
-    var multiPartFile = http.MultipartFile("filesurat", stream, length,
-        filename: basename(file.path));
-
-    request.files.add(multiPartFile);
+    var uri = Uri.parse("$baseUrl/upload_file_post");
+    var request = http.MultipartRequest('POST', uri);
+    request.files.add(await http.MultipartFile.fromPath(
+        'file', _files.files.first.path,
+        contentType: new MediaType('application', 'jpg')));
 
     var response = await request.send();
-
     if (response.statusCode == 200) {
-      log("Status : File Berhasil Diupload!");
+      print("Status : File Uploaded");
     } else {
-      log("Status : File Gagal Diupload......!");
+      print("Status : File Failed Upload");
     }
+
+    setState(() {
+      loading = false;
+    });
   }
 
   @override
@@ -386,7 +384,7 @@ class _UploadFileState extends State<UploadFile> {
         margin: EdgeInsets.only(top: 50, bottom: 30),
         child: TextButton(
           onPressed: () async {
-            _uploadFile(_file);
+            _uploadFile();
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
