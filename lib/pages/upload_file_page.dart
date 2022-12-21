@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:bkkmobile/shared/variabel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 class UploadFile extends StatefulWidget {
   @override
@@ -12,36 +16,54 @@ class UploadFile extends StatefulWidget {
 }
 
 class _UploadFileState extends State<UploadFile> {
-  FilePickerResult result;
-  PlatformFile pickedFile;
-  File fileToDisplay;
+  FilePickerResult fileResult; // untuk mengambil filenya
+  File _file; // informasi Filenya
+  String _namaFile;
+  String _pathFile;
 
   String _fileNameSuratLamaran = '...';
 
   bool loading = false;
 
-  void ambilFile() async {
+  void _ambilFile() async {
     try {
       setState(() {
         loading = true;
       });
 
-      result = await FilePicker.platform
-          .pickFiles(type: FileType.any, allowMultiple: false);
+      fileResult = await FilePicker.platform.pickFiles(type: FileType.any);
+      _file = File(fileResult.files.single.path);
+      _namaFile = fileResult.files.single.name;
+      _pathFile = fileResult.files.single.path;
 
-      if (result != null) {
-        _fileNameSuratLamaran = result.files.first.name;
-        pickedFile = result.files.first;
-        fileToDisplay = File(pickedFile.path.toString());
-
-        print("File Name : $_fileNameSuratLamaran");
-      }
+      log("File Name : $_namaFile");
+      log("FIle Path : $_pathFile");
 
       setState(() {
         loading = false;
       });
     } catch (e) {
       print(e);
+    }
+  }
+
+  void _uploadFile(File file) async {
+    var stream = http.ByteStream(file.openRead())..cast();
+    var length = await file.length();
+    var url = Uri.parse("$baseUrl/upload_file_post");
+
+    var request = http.MultipartRequest("POST", url);
+    var multiPartFile = http.MultipartFile("filesurat", stream, length,
+        filename: basename(file.path));
+
+    request.files.add(multiPartFile);
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      log("Status : File Berhasil Diupload!");
+    } else {
+      log("Status : File Gagal Diupload......!");
     }
   }
 
@@ -100,7 +122,7 @@ class _UploadFileState extends State<UploadFile> {
                   ),
                   IconButton(
                       onPressed: () {
-                        ambilFile();
+                        _ambilFile();
                       },
                       icon: Icon(Icons.upload_file_rounded))
                 ],
@@ -111,251 +133,251 @@ class _UploadFileState extends State<UploadFile> {
       );
     }
 
-    Widget daftarRiwayatUpload() {
-      return Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Daftar Riwayat',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 20, right: 5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _fileNameSuratLamaran,
-                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        ambilFile();
-                      },
-                      icon: Icon(Icons.upload_file_rounded))
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget daftarRiwayatUpload() {
+    //   return Container(
+    //     margin: EdgeInsets.only(top: 20),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Daftar Riwayat',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         SizedBox(height: 12),
+    //         Container(
+    //           width: double.infinity,
+    //           padding: EdgeInsets.only(left: 20, right: 5),
+    //           decoration: BoxDecoration(
+    //             color: Colors.white,
+    //             borderRadius: BorderRadius.circular(4),
+    //           ),
+    //           child: Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Text(
+    //                 _fileNameSuratLamaran,
+    //                 style: primaryTextStyle.copyWith(color: secondaryTextColor),
+    //               ),
+    //               IconButton(
+    //                   onPressed: () {
+    //                     _ambilFile();
+    //                   },
+    //                   icon: Icon(Icons.upload_file_rounded))
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
-    Widget fotoUpload() {
-      return Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Foto',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 20, right: 5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _fileNameSuratLamaran,
-                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        ambilFile();
-                      },
-                      icon: Icon(Icons.upload_file_rounded))
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget fotoUpload() {
+    //   return Container(
+    //     margin: EdgeInsets.only(top: 20),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Foto',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         SizedBox(height: 12),
+    //         Container(
+    //           width: double.infinity,
+    //           padding: EdgeInsets.only(left: 20, right: 5),
+    //           decoration: BoxDecoration(
+    //             color: Colors.white,
+    //             borderRadius: BorderRadius.circular(4),
+    //           ),
+    //           child: Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Text(
+    //                 _fileNameSuratLamaran,
+    //                 style: primaryTextStyle.copyWith(color: secondaryTextColor),
+    //               ),
+    //               IconButton(
+    //                   onPressed: () {
+    //                     _ambilFile();
+    //                   },
+    //                   icon: Icon(Icons.upload_file_rounded))
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
-    Widget ktpUpload() {
-      return Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'KTP',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 20, right: 5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _fileNameSuratLamaran,
-                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        ambilFile();
-                      },
-                      icon: Icon(Icons.upload_file_rounded))
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget ktpUpload() {
+    //   return Container(
+    //     margin: EdgeInsets.only(top: 20),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'KTP',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         SizedBox(height: 12),
+    //         Container(
+    //           width: double.infinity,
+    //           padding: EdgeInsets.only(left: 20, right: 5),
+    //           decoration: BoxDecoration(
+    //             color: Colors.white,
+    //             borderRadius: BorderRadius.circular(4),
+    //           ),
+    //           child: Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Text(
+    //                 _fileNameSuratLamaran,
+    //                 style: primaryTextStyle.copyWith(color: secondaryTextColor),
+    //               ),
+    //               IconButton(
+    //                   onPressed: () {
+    //                     _ambilFile();
+    //                   },
+    //                   icon: Icon(Icons.upload_file_rounded))
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
-    Widget skckUpload() {
-      return Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'SKCK',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 20, right: 5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _fileNameSuratLamaran,
-                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        ambilFile();
-                      },
-                      icon: Icon(Icons.upload_file_rounded))
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget skckUpload() {
+    //   return Container(
+    //     margin: EdgeInsets.only(top: 20),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'SKCK',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         SizedBox(height: 12),
+    //         Container(
+    //           width: double.infinity,
+    //           padding: EdgeInsets.only(left: 20, right: 5),
+    //           decoration: BoxDecoration(
+    //             color: Colors.white,
+    //             borderRadius: BorderRadius.circular(4),
+    //           ),
+    //           child: Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Text(
+    //                 _fileNameSuratLamaran,
+    //                 style: primaryTextStyle.copyWith(color: secondaryTextColor),
+    //               ),
+    //               IconButton(
+    //                   onPressed: () {
+    //                     _ambilFile();
+    //                   },
+    //                   icon: Icon(Icons.upload_file_rounded))
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
-    Widget ijazahUpload() {
-      return Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Ijazah',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 20, right: 5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _fileNameSuratLamaran,
-                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        ambilFile();
-                      },
-                      icon: Icon(Icons.upload_file_rounded))
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget ijazahUpload() {
+    //   return Container(
+    //     margin: EdgeInsets.only(top: 20),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Ijazah',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         SizedBox(height: 12),
+    //         Container(
+    //           width: double.infinity,
+    //           padding: EdgeInsets.only(left: 20, right: 5),
+    //           decoration: BoxDecoration(
+    //             color: Colors.white,
+    //             borderRadius: BorderRadius.circular(4),
+    //           ),
+    //           child: Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Text(
+    //                 _fileNameSuratLamaran,
+    //                 style: primaryTextStyle.copyWith(color: secondaryTextColor),
+    //               ),
+    //               IconButton(
+    //                   onPressed: () {
+    //                     _ambilFile();
+    //                   },
+    //                   icon: Icon(Icons.upload_file_rounded))
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
-    Widget sertifikatUpload() {
-      return Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Sertifikat',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
-            ),
-            SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.only(left: 20, right: 5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _fileNameSuratLamaran,
-                    style: primaryTextStyle.copyWith(color: secondaryTextColor),
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        ambilFile();
-                      },
-                      icon: Icon(Icons.upload_file_rounded))
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    // Widget sertifikatUpload() {
+    //   return Container(
+    //     margin: EdgeInsets.only(top: 20),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Text(
+    //           'Sertifikat',
+    //           style: primaryTextStyle.copyWith(
+    //             fontSize: 16,
+    //             fontWeight: medium,
+    //           ),
+    //         ),
+    //         SizedBox(height: 12),
+    //         Container(
+    //           width: double.infinity,
+    //           padding: EdgeInsets.only(left: 20, right: 5),
+    //           decoration: BoxDecoration(
+    //             color: Colors.white,
+    //             borderRadius: BorderRadius.circular(4),
+    //           ),
+    //           child: Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Text(
+    //                 _fileNameSuratLamaran,
+    //                 style: primaryTextStyle.copyWith(color: secondaryTextColor),
+    //               ),
+    //               IconButton(
+    //                   onPressed: () {
+    //                     _ambilFile();
+    //                   },
+    //                   icon: Icon(Icons.upload_file_rounded))
+    //             ],
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     Widget ubahButton() {
       return Container(
@@ -364,7 +386,7 @@ class _UploadFileState extends State<UploadFile> {
         margin: EdgeInsets.only(top: 50, bottom: 30),
         child: TextButton(
           onPressed: () async {
-            ambilFile();
+            _uploadFile(_file);
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
@@ -414,12 +436,12 @@ class _UploadFileState extends State<UploadFile> {
             children: [
               header(),
               suratLamaranUpload(),
-              daftarRiwayatUpload(),
-              fotoUpload(),
-              ktpUpload(),
-              skckUpload(),
-              ijazahUpload(),
-              sertifikatUpload(),
+              // daftarRiwayatUpload(),
+              // fotoUpload(),
+              // ktpUpload(),
+              // skckUpload(),
+              // ijazahUpload(),
+              // sertifikatUpload(),
               ubahButton(),
             ],
           ),
