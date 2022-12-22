@@ -1,3 +1,6 @@
+import 'package:bkkmobile/main.dart';
+import 'package:bkkmobile/models/cek_loker_model.dart';
+import 'package:bkkmobile/models/daftar_loker_model.dart';
 import 'package:bkkmobile/models/detail_loker_model.dart';
 import 'package:bkkmobile/services/loker_service.dart';
 import 'package:bkkmobile/shared/loading.dart';
@@ -13,6 +16,7 @@ class LokerPage extends StatefulWidget {
 
 class _LokerPageState extends State<LokerPage> {
   DetailLokerModel detailLoker;
+  CekLokerModel statusLoker;
   LokerService service = LokerService();
   bool loading = true;
   String idLoker;
@@ -22,14 +26,23 @@ class _LokerPageState extends State<LokerPage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getDataLoker();
+      getStatusLoker();
+
+      setState(() {
+        loading = false;
+      });
     });
   }
 
   getDataLoker() async {
     detailLoker = await service.getDetailLoker(idLoker);
-    setState(() {
-      loading = false;
-    });
+    setState(() {});
+  }
+
+  getStatusLoker() async {
+    statusLoker = await service.getStatusLoker(idLoker, idPelamarUser);
+    print("Status : Terdaftar Loker ini ${statusLoker.status}");
+    setState(() {});
   }
 
   @override
@@ -37,78 +50,6 @@ class _LokerPageState extends State<LokerPage> {
     final arg = (ModalRoute.of(context).settings.arguments ??
         <String, dynamic>{}) as Map;
     idLoker = arg['idLoker'];
-
-    Future<void> showSuccessDialog() async {
-      return showDialog(
-        context: context,
-        builder: (BuildContext context) => Container(
-          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
-          child: AlertDialog(
-            backgroundColor: backgroundColor3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Icon(Icons.close, color: primaryTextColor),
-                    ),
-                  ),
-                  Image.asset(
-                    'assets/images/icon_success.png',
-                    width: 100,
-                  ),
-                  SizedBox(height: 12),
-                  Text(
-                    'Selamat :)',
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 18,
-                      fontWeight: semiBold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    'Anda berhasil mendaftar loker ini',
-                    style: secoundaryTextStyle,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    width: 154,
-                    height: 44,
-                    child: TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        'Lihat history',
-                        style: primaryTextStyle.copyWith(
-                          fontSize: 16,
-                          fontWeight: medium,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
 
     Widget header() {
       return Stack(
@@ -257,7 +198,9 @@ class _LokerPageState extends State<LokerPage> {
                 ],
               ),
             ),
+
             SizedBox(height: 30),
+
             //NOTE BUTTON
             Container(
               width: double.infinity,
@@ -268,8 +211,20 @@ class _LokerPageState extends State<LokerPage> {
                     child: Container(
                       height: 54,
                       child: TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/upload-file');
+                        onPressed: () async {
+                          setState(() {
+                            loading = true;
+                          });
+
+                          await DaftarLokerModel.postDaftar(
+                                  idLoker, idPelamarUser)
+                              .then((value) => Navigator.pushNamed(
+                                  context, '/upload-file',
+                                  arguments: {'idLoker': idLoker}));
+
+                          setState(() {
+                            loading = false;
+                          });
                         },
                         style: TextButton.styleFrom(
                             shape: RoundedRectangleBorder(

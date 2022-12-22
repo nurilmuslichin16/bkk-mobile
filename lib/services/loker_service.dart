@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:bkkmobile/models/cek_loker_model.dart';
 import 'package:bkkmobile/models/detail_loker_model.dart';
 import 'package:bkkmobile/models/loker_model.dart';
 import 'package:bkkmobile/shared/variabel.dart';
@@ -45,6 +46,24 @@ class LokerService {
         var jsonObject = jsonDecode(respone.body);
 
         return DetailLokerModel.createObject(jsonObject['data']);
+      } else {
+        print("Error : Can't Connect Server");
+      }
+    } catch (e) {
+      print("Error : " + e.toString());
+    }
+  }
+
+  Future<CekLokerModel> getStatusLoker(
+      String idLowongan, String idPelamar) async {
+    try {
+      var uri = Uri.parse('$baseUrl/cek_status_loker/$idLowongan/$idPelamar');
+      var respone = await http.get(uri);
+
+      if (respone.statusCode == 200) {
+        var jsonObject = jsonDecode(respone.body);
+
+        return CekLokerModel.createObject(jsonObject);
       } else {
         print("Error : Can't Connect Server");
       }

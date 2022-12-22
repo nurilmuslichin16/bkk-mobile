@@ -1,4 +1,5 @@
 import 'package:bkkmobile/main.dart';
+import 'package:bkkmobile/models/daftar_loker_model.dart';
 import 'package:bkkmobile/shared/variabel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class UploadFile extends StatefulWidget {
 }
 
 class _UploadFileState extends State<UploadFile> {
+  String idLoker;
   FilePickerResult _filesUpload;
 
   String _nameFileSurat = 'Pilih File...';
@@ -141,6 +143,79 @@ class _UploadFileState extends State<UploadFile> {
 
       var response = await request.send();
       if (response.statusCode == 200) {
+        switch (jenis) {
+          case 'surat':
+            _statusUploadSurat = true;
+            break;
+          case 'riwayat':
+            _statusUploadRiwayat = true;
+            break;
+          case 'foto':
+            _statusUploadFoto = true;
+            break;
+          case 'ktp':
+            _statusUploadKtp = true;
+            break;
+          case 'skck':
+            _statusUploadSkck = true;
+            break;
+          case 'ijazah':
+            _statusUploadIjazah = true;
+            break;
+          default:
+            _statusUploadSertifikat = true;
+            break;
+        }
+
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return Dialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: Image.asset("assets/images/approved.png",
+                            fit: BoxFit.cover),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      const Text(
+                        "Berhasil Upload!",
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Text("File berhasil terupload."),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            _filesUpload = null;
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"))
+                    ],
+                  ),
+                ),
+              );
+            });
+
         print("Status : File Uploaded");
       } else {
         print("Status : File Failed Upload");
@@ -154,6 +229,10 @@ class _UploadFileState extends State<UploadFile> {
 
   @override
   Widget build(BuildContext context) {
+    final arg = (ModalRoute.of(context).settings.arguments ??
+        <String, dynamic>{}) as Map;
+    idLoker = arg['idLoker'];
+
     Widget header() {
       return Container(
         margin: EdgeInsets.only(top: 30),
@@ -878,7 +957,17 @@ class _UploadFileState extends State<UploadFile> {
         width: double.infinity,
         margin: EdgeInsets.only(top: 50, bottom: 30),
         child: TextButton(
-          onPressed: () async {},
+          onPressed: () async {
+            setState(() {
+              loading = true;
+            });
+
+            await DaftarLokerModel.postDaftar(idLoker, idPelamarUser);
+
+            setState(() {
+              loading = false;
+            });
+          },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
