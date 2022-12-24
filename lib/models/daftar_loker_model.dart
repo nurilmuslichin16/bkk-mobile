@@ -4,14 +4,17 @@ import 'package:bkkmobile/shared/variabel.dart';
 import 'package:http/http.dart' as http;
 
 class DaftarLokerModel {
+  String idDetailLoker = '';
   bool status = false;
   String text = '';
 
-  DaftarLokerModel({this.status, this.text});
+  DaftarLokerModel({this.idDetailLoker, this.status, this.text});
 
   factory DaftarLokerModel.createObject(Map<String, dynamic> object) {
     return DaftarLokerModel(
-        status: object['status'], text: object['text'] ?? 'empty');
+        idDetailLoker: object['idDetailLoker'].toString() ?? 'empty',
+        status: object['status'],
+        text: object['text'] ?? 'empty');
   }
 
   static Future postDaftar(String idLowongan, String idPelamar) async {

@@ -1,10 +1,8 @@
 import 'package:bkkmobile/main.dart';
-import 'package:bkkmobile/models/daftar_loker_model.dart';
 import 'package:bkkmobile/shared/variabel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:bkkmobile/theme.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
@@ -14,7 +12,7 @@ class UploadFile extends StatefulWidget {
 }
 
 class _UploadFileState extends State<UploadFile> {
-  String idLoker;
+  String idDetailLoker;
   FilePickerResult _filesUpload;
 
   String _nameFileSurat = 'Pilih File...';
@@ -133,6 +131,7 @@ class _UploadFileState extends State<UploadFile> {
       var uri = Uri.parse("$baseUrl/upload_file_post");
       var request = http.MultipartRequest('POST', uri);
 
+      request.fields['id_detail_lowongan'] = idDetailLoker;
       request.fields['jenis'] = jenis;
       request.fields['fileName'] =
           idPelamarUser + '-' + _filesUpload.files.first.name;
@@ -214,7 +213,7 @@ class _UploadFileState extends State<UploadFile> {
                   ),
                 ),
               );
-            });
+            }).then((value) => _cekBerkas());
 
         print("Status : File Uploaded");
       } else {
@@ -227,11 +226,23 @@ class _UploadFileState extends State<UploadFile> {
     });
   }
 
+  void _cekBerkas() {
+    if (_statusUploadSurat != false &&
+        _statusUploadRiwayat != false &&
+        _statusUploadFoto != false &&
+        _statusUploadKtp != false &&
+        _statusUploadSkck != false &&
+        _statusUploadIjazah != false &&
+        _statusUploadSertifikat != false) {
+      Navigator.of(context).pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final arg = (ModalRoute.of(context).settings.arguments ??
         <String, dynamic>{}) as Map;
-    idLoker = arg['idLoker'];
+    idDetailLoker = arg['idDetailLoker'];
 
     Widget header() {
       return Container(
@@ -250,7 +261,13 @@ class _UploadFileState extends State<UploadFile> {
               height: 2,
             ),
             Text('Silahkan upload berkas satu persatu.',
-                style: subtitleTextStyle)
+                style: subtitleTextStyle),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+                '*Pastikan berkas sudah terupload sebelum kembali ke halaman sebelumnya!',
+                style: subtitleTextStyle.copyWith(color: Colors.red))
           ],
         ),
       );
@@ -853,7 +870,7 @@ class _UploadFileState extends State<UploadFile> {
 
     Widget sertifikatUpload() {
       return Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(top: 20, bottom: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -951,59 +968,6 @@ class _UploadFileState extends State<UploadFile> {
       );
     }
 
-    Widget daftarLoker() {
-      return Container(
-        height: 50,
-        width: double.infinity,
-        margin: EdgeInsets.only(top: 50, bottom: 30),
-        child: TextButton(
-          onPressed: () async {
-            setState(() {
-              loading = true;
-            });
-
-            await DaftarLokerModel.postDaftar(idLoker, idPelamarUser);
-
-            setState(() {
-              loading = false;
-            });
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: loading
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SpinKitCircle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      size: 25.0,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      "Mohon menunggu...",
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
-                )
-              : Text(
-                  'Daftar Lowongan Kerja',
-                  style: buttonTextStyle.copyWith(
-                    fontSize: 16,
-                    fontWeight: medium,
-                  ),
-                ),
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: backgroundColor2,
       resizeToAvoidBottomInset: false,
@@ -1021,8 +985,7 @@ class _UploadFileState extends State<UploadFile> {
               ktpUpload(),
               skckUpload(),
               ijazahUpload(),
-              sertifikatUpload(),
-              daftarLoker()
+              sertifikatUpload()
             ],
           ),
         ),

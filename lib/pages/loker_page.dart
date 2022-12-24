@@ -20,13 +20,14 @@ class _LokerPageState extends State<LokerPage> {
   LokerService service = LokerService();
   bool loading = true;
   String idLoker;
+  String idDetailLoker;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getDataLoker();
-      getStatusLoker();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await getDataLoker();
+      await getStatusLoker();
 
       setState(() {
         loading = false;
@@ -41,7 +42,10 @@ class _LokerPageState extends State<LokerPage> {
 
   getStatusLoker() async {
     statusLoker = await service.getStatusLoker(idLoker, idPelamarUser);
-    print("Status : Terdaftar Loker ini ${statusLoker.status}");
+    setState(() {});
+  }
+
+  reloadData() {
     setState(() {});
   }
 
@@ -210,33 +214,196 @@ class _LokerPageState extends State<LokerPage> {
                   Expanded(
                     child: Container(
                       height: 54,
-                      child: TextButton(
-                        onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
+                      child: statusLoker.status
+                          ? TextButton(
+                              onPressed: () {},
+                              style: TextButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  backgroundColor: secondaryColor),
+                              child: Text(
+                                'Anda sudah terdaftar',
+                                style: buttonTextStyle.copyWith(
+                                    fontSize: 16, fontWeight: semiBold),
+                              ),
+                            )
+                          : TextButton(
+                              onPressed: () async {
+                                setState(() {
+                                  loading = true;
+                                });
 
-                          await DaftarLokerModel.postDaftar(
-                                  idLoker, idPelamarUser)
-                              .then((value) => Navigator.pushNamed(
-                                  context, '/upload-file',
-                                  arguments: {'idLoker': idLoker}));
+                                await DaftarLokerModel.postDaftar(
+                                        idLoker, idPelamarUser)
+                                    .then((value) => {
+                                          if (value.status != false)
+                                            {
+                                              idDetailLoker =
+                                                  value.idDetailLoker,
+                                              showDialog(
+                                                      context: context,
+                                                      barrierDismissible: false,
+                                                      builder: (context) {
+                                                        return Dialog(
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20)),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                const SizedBox(
+                                                                  height: 15,
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 100,
+                                                                  width: 100,
+                                                                  child: Image.asset(
+                                                                      "assets/images/approved.png",
+                                                                      fit: BoxFit
+                                                                          .cover),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 15,
+                                                                ),
+                                                                const Text(
+                                                                  "Sukses!",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          17,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 15,
+                                                                ),
+                                                                Text(
+                                                                    value.text),
+                                                                const SizedBox(
+                                                                  height: 15,
+                                                                ),
+                                                                TextButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child:
+                                                                        const Text(
+                                                                            "OK"))
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        );
+                                                      })
+                                                  .then((value) =>
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          '/upload-file',
+                                                          arguments: {
+                                                            'idDetailLoker':
+                                                                idDetailLoker
+                                                          }))
+                                                  .then((value) => reloadData())
+                                            }
+                                          else
+                                            {
+                                              showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (context) {
+                                                    return Dialog(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20)),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            const SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            SizedBox(
+                                                              height: 100,
+                                                              width: 100,
+                                                              child: Image.asset(
+                                                                  "assets/images/rejected.png",
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            const Text(
+                                                              "Opss! Gagal",
+                                                              style: TextStyle(
+                                                                  fontSize: 17,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            Text(value.text),
+                                                            const SizedBox(
+                                                              height: 15,
+                                                            ),
+                                                            TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                        "OK"))
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  })
+                                            }
+                                        });
 
-                          setState(() {
-                            loading = false;
-                          });
-                        },
-                        style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                                setState(() {
+                                  loading = false;
+                                });
+                              },
+                              style: TextButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  backgroundColor: primaryColor),
+                              child: Text(
+                                'Daftar loker ini sekarang',
+                                style: buttonTextStyle.copyWith(
+                                    fontSize: 16, fontWeight: semiBold),
+                              ),
                             ),
-                            backgroundColor: primaryColor),
-                        child: Text(
-                          'Daftar loker ini sekarang',
-                          style: buttonTextStyle.copyWith(
-                              fontSize: 16, fontWeight: semiBold),
-                        ),
-                      ),
                     ),
                   ),
                 ],
