@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bkkmobile/main.dart';
 import 'package:bkkmobile/shared/variabel.dart';
 import 'package:http/http.dart' as http;
 
@@ -33,7 +34,7 @@ class LokerModel {
 
   static Future<List<LokerModel>> getListLoker() async {
     try {
-      var uri = Uri.parse('$baseUrl/new_loker');
+      var uri = Uri.parse('$baseUrl/new_loker/$jurusanUser');
       var respone = await http.get(uri);
 
       if (respone.statusCode == 200) {

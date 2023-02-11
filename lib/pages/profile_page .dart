@@ -429,7 +429,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
             SizedBox(height: 10),
 
-            //NOTE BUTTON
+            //NOTE BUTTON UBAH PROFILE
             Container(
               width: double.infinity,
               margin: EdgeInsets.all(defaultMargin),
@@ -460,6 +460,50 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             Text(
                               'Ubah Profile',
+                              style: buttonTextStyle.copyWith(
+                                  fontWeight: semiBold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            //NOTE BUTTON LENGKAPI BERKAS
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.fromLTRB(
+                  defaultMargin, 0, defaultMargin, defaultMargin),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 50,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/upload-file')
+                              .then((value) => reloadData());
+                        },
+                        style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            backgroundColor: secondaryColor),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.file_present_rounded,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Lengkapi Berkas',
                               style: buttonTextStyle.copyWith(
                                   fontWeight: semiBold),
                             ),

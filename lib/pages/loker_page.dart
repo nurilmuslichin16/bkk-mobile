@@ -309,14 +309,6 @@ class _LokerPageState extends State<LokerPage> {
                                                           ),
                                                         );
                                                       })
-                                                  .then((value) =>
-                                                      Navigator.pushNamed(
-                                                          context,
-                                                          '/upload-file',
-                                                          arguments: {
-                                                            'idDetailLoker':
-                                                                idDetailLoker
-                                                          }))
                                                   .then((value) => reloadData())
                                             }
                                           else

@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:bkkmobile/main.dart';
+import 'package:bkkmobile/models/berkas_model.dart';
 import 'package:bkkmobile/shared/variabel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +34,72 @@ class _UploadFileState extends State<UploadFile> {
   bool _statusUploadIjazah = false;
   bool _statusUploadSertifikat = false;
 
-  bool loading = false;
+  bool loading = true;
+
+  @override
+  void initState() {
+    cekBerkas();
+    super.initState();
+  }
+
+  cekBerkas() async {
+    await BerkasModel.getBerkas().then((value) => validasiBerkas(value));
+  }
+
+  validasiBerkas(BerkasModel berkas) {
+    if (berkas.suratLamaran != 'empty') {
+      setState(() {
+        _statusUploadSurat = true;
+        _nameFileSurat = "Berkas sudah terupload!";
+      });
+    }
+
+    if (berkas.daftarRiwayat != 'empty') {
+      setState(() {
+        _statusUploadRiwayat = true;
+        _nameFileRiwayat = "Berkas sudah terupload!";
+      });
+    }
+
+    if (berkas.foto != 'empty') {
+      setState(() {
+        _statusUploadFoto = true;
+        _nameFileFoto = "Berkas sudah terupload!";
+      });
+    }
+
+    if (berkas.ktp != 'empty') {
+      setState(() {
+        _statusUploadKtp = true;
+        _nameFileKtp = "Berkas sudah terupload!";
+      });
+    }
+
+    if (berkas.skck != 'empty') {
+      setState(() {
+        _statusUploadSkck = true;
+        _nameFileSkck = "Berkas sudah terupload!";
+      });
+    }
+
+    if (berkas.ijazah != 'empty') {
+      setState(() {
+        _statusUploadIjazah = true;
+        _nameFileIjazah = "Berkas sudah terupload!";
+      });
+    }
+
+    if (berkas.sertifikat != 'empty') {
+      setState(() {
+        _statusUploadSertifikat = true;
+        _nameFileSertifikat = "Berkas sudah terupload!";
+      });
+    }
+
+    setState(() {
+      loading = false;
+    });
+  }
 
   void _ambilFile(String jenis) async {
     try {
@@ -131,7 +199,7 @@ class _UploadFileState extends State<UploadFile> {
       var uri = Uri.parse("$baseUrl/upload_file_post");
       var request = http.MultipartRequest('POST', uri);
 
-      request.fields['id_detail_lowongan'] = idDetailLoker;
+      request.fields['idPelamar'] = idPelamarUser;
       request.fields['jenis'] = jenis;
       request.fields['fileName'] =
           idPelamarUser + '-' + _filesUpload.files.first.name;
@@ -213,7 +281,7 @@ class _UploadFileState extends State<UploadFile> {
                   ),
                 ),
               );
-            }).then((value) => _cekBerkas());
+            });
 
         print("Status : File Uploaded");
       } else {
@@ -224,18 +292,6 @@ class _UploadFileState extends State<UploadFile> {
     setState(() {
       loading = false;
     });
-  }
-
-  void _cekBerkas() {
-    if (_statusUploadSurat != false &&
-        _statusUploadRiwayat != false &&
-        _statusUploadFoto != false &&
-        _statusUploadKtp != false &&
-        _statusUploadSkck != false &&
-        _statusUploadIjazah != false &&
-        _statusUploadSertifikat != false) {
-      Navigator.of(context).pop();
-    }
   }
 
   @override
