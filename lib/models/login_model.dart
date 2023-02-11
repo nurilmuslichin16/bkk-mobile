@@ -13,8 +13,9 @@ class LoginModel {
   String nohp = '';
   String email = '';
   String tanggalLahir = '';
-  String kewarganegaraan = '';
+  String nisn = '';
   String jurusan = '';
+  String jenis = '';
 
   LoginModel(
       {this.status,
@@ -26,8 +27,9 @@ class LoginModel {
       this.nohp,
       this.email,
       this.tanggalLahir,
-      this.kewarganegaraan,
-      this.jurusan});
+      this.nisn,
+      this.jurusan,
+      this.jenis});
 
   factory LoginModel.createObject(Map<String, dynamic> object) {
     return LoginModel(
@@ -40,16 +42,17 @@ class LoginModel {
       nohp: object['no_hp'] ?? 'empty',
       email: object['email'] ?? 'empty',
       tanggalLahir: object['tanggal_lahir'] ?? 'empty',
-      kewarganegaraan: object['kewarganegaraan'] ?? 'empty',
+      nisn: object['nisn'] ?? 'empty',
       jurusan: object['jurusan'] ?? 'empty',
+      jenis: object['jenis'] ?? 'empty',
     );
   }
 
-  static Future postLogin(String username, String pass) async {
+  static Future postLogin(String nisn, String pass) async {
     try {
       var uri = Uri.parse('$baseUrl/login_post');
       var respone = await http.post(uri, body: {
-        "username": username,
+        "nisn": nisn,
         "password": pass,
       });
 

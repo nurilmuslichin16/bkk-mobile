@@ -19,11 +19,12 @@ class RegisterModel {
       String username,
       String password,
       String alamat,
-      String kewarganegaraan,
+      String nisn,
       String nohp,
       String email,
       String tanggalLahir,
-      String jurusan) async {
+      String jurusan,
+      String jenis) async {
     try {
       var uri = Uri.parse('$baseUrl/register_post');
       var respone = await http.post(uri, body: {
@@ -31,11 +32,12 @@ class RegisterModel {
         "username": username,
         "password": password,
         "alamat": alamat,
-        "kewarganegaraan": kewarganegaraan,
+        "nisn": nisn,
         "no_hp": nohp,
         "email": email,
         "tanggal_lahir": tanggalLahir,
-        "jurusan": jurusan
+        "jurusan": jurusan,
+        "jenis": jenis
       });
 
       if (respone.statusCode == 200) {

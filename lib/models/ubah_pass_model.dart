@@ -17,11 +17,11 @@ class UbahPassModel {
   }
 
   static Future postUbahPassword(
-      String username, String passLama, String passBaru) async {
+      String nisn, String passLama, String passBaru) async {
     try {
       var uri = Uri.parse('$baseUrl/ubah_password_post');
       var respone = await http.post(uri, body: {
-        "username": username,
+        "nisn": nisn,
         "passwordLama": passLama,
         "passwordBaru": passBaru,
       });

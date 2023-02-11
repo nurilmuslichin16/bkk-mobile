@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Text(
-                    '@$usernameUser',
+                    '$nisnUser - @$usernameUser',
                     style: subtitleTextStyle.copyWith(
                       fontSize: 16,
                     ),

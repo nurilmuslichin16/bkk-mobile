@@ -1,25 +1,25 @@
 class UserModel {
   int id;
   String name;
-  String username;
+  String nisn;
 
   UserModel({
     this.id,
     this.name,
-    this.username,
+    this.nisn,
   });
 
   UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    username = json['username'];
+    nisn = json['nisn'];
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
-      'username': username,
+      'nisn': nisn,
     };
   }
 }

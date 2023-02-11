@@ -24,12 +24,13 @@ class _UbahProfileState extends State<UbahProfile> {
   final _noHpController = TextEditingController();
   final _emailController = TextEditingController();
   final _tanggalLahirController = TextEditingController();
-  final _jurusanController = TextEditingController();
+  String _jurusanValue = '';
+  String _jenisValue = '';
 
   bool loading = false;
 
   Future setPreferenProfile(namaLengkap, username, alamat, nisn, nohp, email,
-      tanggalLahir, jurusan) async {
+      tanggalLahir, jurusan, jenis) async {
     preferences = await SharedPreferences.getInstance();
     preferences.setString('namaLengkap', namaLengkap);
     preferences.setString('username', username);
@@ -39,6 +40,7 @@ class _UbahProfileState extends State<UbahProfile> {
     preferences.setString('tanggalLahir', tanggalLahir);
     preferences.setString('nisn', nisn);
     preferences.setString('jurusan', jurusan);
+    preferences.setString('jenis', jenis);
     setState(() {
       namaLengkapUser = namaLengkap;
       usernameUser = username;
@@ -48,6 +50,7 @@ class _UbahProfileState extends State<UbahProfile> {
       tanggalLahirUser = tanggalLahir;
       nisnUser = nisn;
       jurusanUser = jurusan;
+      jenisUser = jenis;
     });
   }
 
@@ -60,7 +63,8 @@ class _UbahProfileState extends State<UbahProfile> {
     _noHpController.text = nohpUser;
     _emailController.text = emailUser;
     _tanggalLahirController.text = tanggalLahirUser;
-    _jurusanController.text = jurusanUser;
+    _jurusanValue = jurusanUser;
+    _jenisValue = jenisUser;
     super.initState();
   }
 
@@ -91,7 +95,7 @@ class _UbahProfileState extends State<UbahProfile> {
 
     Widget fullNameInput() {
       return Container(
-        margin: EdgeInsets.only(top: 50),
+        margin: EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -241,7 +245,7 @@ class _UbahProfileState extends State<UbahProfile> {
 
     Widget nisnInput() {
       return Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(top: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -470,7 +474,6 @@ class _UbahProfileState extends State<UbahProfile> {
             ),
             SizedBox(height: 12),
             Container(
-              height: 50,
               padding: EdgeInsets.symmetric(
                 horizontal: 16,
               ),
@@ -478,26 +481,135 @@ class _UbahProfileState extends State<UbahProfile> {
                 color: backgroundColor1,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Center(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.lightbulb,
-                      size: 20.0,
-                    ),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: TextFormField(
-                        style: primaryTextStyle,
-                        controller: _jurusanController,
-                        decoration: InputDecoration.collapsed(
-                          hintText: 'Masukan jurusan anda',
-                          hintStyle: subtitleTextStyle,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: 'Akutansi',
+                          groupValue: _jurusanValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _jurusanValue = value as String;
+                            });
+                          },
                         ),
-                      ),
+                        SizedBox(width: 16),
+                        Text(
+                          "Akutansi",
+                          style: primaryTextStyle.copyWith(
+                            fontSize: 14,
+                            fontWeight: medium,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Center(
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: 'Multimedia',
+                          groupValue: _jurusanValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _jurusanValue = value as String;
+                            });
+                          },
+                        ),
+                        SizedBox(width: 16),
+                        Text(
+                          "Multimedia",
+                          style: primaryTextStyle.copyWith(
+                            fontSize: 14,
+                            fontWeight: medium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget jenisInput() {
+      return Container(
+        margin: EdgeInsets.only(top: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Jenis',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            SizedBox(height: 12),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+              ),
+              decoration: BoxDecoration(
+                color: backgroundColor1,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: 'Siswa',
+                          groupValue: _jenisValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _jenisValue = value as String;
+                            });
+                          },
+                        ),
+                        SizedBox(width: 16),
+                        Text(
+                          "Siswa",
+                          style: primaryTextStyle.copyWith(
+                            fontSize: 14,
+                            fontWeight: medium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Center(
+                    child: Row(
+                      children: [
+                        Radio(
+                          value: 'Alumni',
+                          groupValue: _jenisValue,
+                          onChanged: (value) {
+                            setState(() {
+                              _jenisValue = value as String;
+                            });
+                          },
+                        ),
+                        SizedBox(width: 16),
+                        Text(
+                          "Alumni",
+                          style: primaryTextStyle.copyWith(
+                            fontSize: 14,
+                            fontWeight: medium,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -520,7 +632,8 @@ class _UbahProfileState extends State<UbahProfile> {
             var nohp = _noHpController.text;
             var email = _emailController.text;
             var tanggalLahir = _tanggalLahirController.text;
-            var jurusan = _jurusanController.text;
+            var jurusan = _jurusanValue;
+            var jenis = _jenisValue;
 
             setState(() {
               loading = true;
@@ -533,7 +646,8 @@ class _UbahProfileState extends State<UbahProfile> {
                 nohp != "" &&
                 email != "" &&
                 tanggalLahir != "" &&
-                jurusan != "") {
+                jurusan != "" &&
+                jenis != "") {
               await UbahProfileModel.postUbahProfile(
                       idPelamarUser,
                       namaLengkap,
@@ -543,7 +657,8 @@ class _UbahProfileState extends State<UbahProfile> {
                       nohp,
                       email,
                       tanggalLahir,
-                      jurusan)
+                      jurusan,
+                      jenis)
                   .then((value) => {
                         if (value.status != false)
                           {
@@ -598,7 +713,8 @@ class _UbahProfileState extends State<UbahProfile> {
                                                         nohp,
                                                         email,
                                                         tanggalLahir,
-                                                        jurusan)
+                                                        jurusan,
+                                                        jenis)
                                                     .whenComplete(() =>
                                                         Navigator.of(context)
                                                             .pop());
@@ -774,6 +890,7 @@ class _UbahProfileState extends State<UbahProfile> {
               emailInput(),
               tanggalLahirInput(),
               jurusanInput(),
+              jenisInput(),
               ubahButton()
             ],
           ),

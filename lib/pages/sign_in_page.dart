@@ -22,7 +22,7 @@ class _SignInState extends State<SignIn> {
   bool loading = false;
 
   Future setPreferenLogin(idPelamar, namaLengkap, username, alamat, nohp, email,
-      tanggalLahir, nisn, jurusan) async {
+      tanggalLahir, nisn, jurusan, jenis) async {
     preferences = await SharedPreferences.getInstance();
     preferences.setString('idPelamar', idPelamar);
     preferences.setString('nisn', nisn);
@@ -33,6 +33,7 @@ class _SignInState extends State<SignIn> {
     preferences.setString('email', email);
     preferences.setString('tanggalLahir', tanggalLahir);
     preferences.setString('jurusan', jurusan);
+    preferences.setString('jenis', jenis);
     setState(() {
       idPelamarUser = idPelamar;
       nisnUser = nisn;
@@ -43,6 +44,7 @@ class _SignInState extends State<SignIn> {
       emailUser = email;
       tanggalLahirUser = tanggalLahir;
       jurusanUser = jurusan;
+      jenisUser = jenis;
     });
   }
 
@@ -240,7 +242,8 @@ class _SignInState extends State<SignIn> {
                                                     value.email,
                                                     value.tanggalLahir,
                                                     value.nisn,
-                                                    value.jurusan)
+                                                    value.jurusan,
+                                                    value.jenis)
                                                 .whenComplete(() =>
                                                     Navigator.of(context)
                                                         .pop());

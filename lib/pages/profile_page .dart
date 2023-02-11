@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bkkmobile/main.dart';
 import 'package:bkkmobile/shared/loading.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
     preferences.remove('tanggalLahir');
     preferences.remove('nisn');
     preferences.remove('jurusan');
+    preferences.remove('jenis');
     setState(() {
       idPelamarUser = null;
       namaLengkapUser = null;
@@ -38,6 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
       tanggalLahirUser = null;
       nisnUser = null;
       jurusanUser = null;
+      jenisUser = null;
     });
   }
 
@@ -180,6 +184,33 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
 
+            // NOTE NISN
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(
+                top: 10,
+                left: defaultMargin,
+                right: defaultMargin,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'NISN',
+                    style: primaryTextStyle.copyWith(fontWeight: medium),
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Text(
+                    nisnUser,
+                    style: subtitleTextStyle.copyWith(fontWeight: light),
+                    textAlign: TextAlign.justify,
+                  ),
+                ],
+              ),
+            ),
+
             // NOTE NAMA
             Container(
               width: double.infinity,
@@ -315,33 +346,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
 
-            // NOTE NEGARA
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.only(
-                top: 10,
-                left: defaultMargin,
-                right: defaultMargin,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Negara',
-                    style: primaryTextStyle.copyWith(fontWeight: medium),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Text(
-                    nisnUser,
-                    style: subtitleTextStyle.copyWith(fontWeight: light),
-                    textAlign: TextAlign.justify,
-                  ),
-                ],
-              ),
-            ),
-
             // NOTE JURUSAN
             Container(
               width: double.infinity,
@@ -362,6 +366,33 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   Text(
                     jurusanUser,
+                    style: subtitleTextStyle.copyWith(fontWeight: light),
+                    textAlign: TextAlign.justify,
+                  ),
+                ],
+              ),
+            ),
+
+            // NOTE JENIS
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(
+                top: 10,
+                left: defaultMargin,
+                right: defaultMargin,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Jenis',
+                    style: primaryTextStyle.copyWith(fontWeight: medium),
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Text(
+                    jenisUser,
                     style: subtitleTextStyle.copyWith(fontWeight: light),
                     textAlign: TextAlign.justify,
                   ),

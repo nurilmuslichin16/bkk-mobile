@@ -23,6 +23,7 @@ String emailUser;
 String tanggalLahirUser;
 String nisnUser;
 String jurusanUser;
+String jenisUser;
 
 class MyApp extends StatefulWidget {
   @override
@@ -74,6 +75,7 @@ class _MyAppState extends State<MyApp> {
     var gettanggalLahir = preferences.getString('tanggalLahir');
     var getnisn = preferences.getString('nisn');
     var getjurusan = preferences.getString('jurusan');
+    var getjenis = preferences.getString('jenis');
     setState(() {
       idPelamarUser = getidPelamar;
       namaLengkapUser = getnamaLengkap;
@@ -84,6 +86,7 @@ class _MyAppState extends State<MyApp> {
       tanggalLahirUser = gettanggalLahir;
       nisnUser = getnisn;
       jurusanUser = getjurusan;
+      jenisUser = getjenis;
     });
   }
 }

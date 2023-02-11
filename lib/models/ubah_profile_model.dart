@@ -19,11 +19,12 @@ class UbahProfileModel {
       String namaLengkap,
       String username,
       String alamat,
-      String kewarganegaraan,
+      String nisn,
       String nohp,
       String email,
       String tanggalLahir,
-      String jurusan) async {
+      String jurusan,
+      String jenis) async {
     try {
       var uri = Uri.parse('$baseUrl/ubah_profile_post');
       var respone = await http.post(uri, body: {
@@ -31,11 +32,12 @@ class UbahProfileModel {
         "nama_lengkap": namaLengkap,
         "username": username,
         "alamat": alamat,
-        "kewarganegaraan": kewarganegaraan,
+        "nisn": nisn,
         "no_hp": nohp,
         "email": email,
         "tanggal_lahir": tanggalLahir,
-        "jurusan": jurusan
+        "jurusan": jurusan,
+        "jenis": jenis
       });
 
       if (respone.statusCode == 200) {
