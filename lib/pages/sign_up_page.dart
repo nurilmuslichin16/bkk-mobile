@@ -19,7 +19,7 @@ class _SignUpState extends State<SignUp> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _alamatController = TextEditingController();
-  final _kewarganegaraanController = TextEditingController();
+  final _nisnController = TextEditingController();
   final _noHpController = TextEditingController();
   final _emailController = TextEditingController();
   final _tanggalLahirController = TextEditingController();
@@ -54,7 +54,7 @@ class _SignUpState extends State<SignUp> {
 
     Widget fullNameInput() {
       return Container(
-        margin: EdgeInsets.only(top: 50),
+        margin: EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -253,14 +253,14 @@ class _SignUpState extends State<SignUp> {
       );
     }
 
-    Widget kewarganegaraanInput() {
+    Widget nisnInput() {
       return Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: EdgeInsets.only(top: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Kewarganegaraan',
+              'NISN',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -287,9 +287,9 @@ class _SignUpState extends State<SignUp> {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
-                        controller: _kewarganegaraanController,
+                        controller: _nisnController,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Masukan kewarganegaraan anda',
+                          hintText: 'Masukan NISN anda',
                           hintStyle: subtitleTextStyle,
                         ),
                       ),
@@ -531,7 +531,7 @@ class _SignUpState extends State<SignUp> {
             var username = _usernameController.text;
             var password = _passwordController.text;
             var alamat = _alamatController.text;
-            var kewarganegaraan = _kewarganegaraanController.text;
+            var nisn = _nisnController.text;
             var nohp = _noHpController.text;
             var email = _emailController.text;
             var tanggalLahir = _tanggalLahirController.text;
@@ -545,21 +545,13 @@ class _SignUpState extends State<SignUp> {
                 username != "" &&
                 password != "" &&
                 alamat != "" &&
-                kewarganegaraan != "" &&
+                nisn != "" &&
                 nohp != "" &&
                 email != "" &&
                 tanggalLahir != "" &&
                 jurusan != "") {
-              await RegisterModel.postLogin(
-                      namaLengkap,
-                      username,
-                      password,
-                      alamat,
-                      kewarganegaraan,
-                      nohp,
-                      email,
-                      tanggalLahir,
-                      jurusan)
+              await RegisterModel.postLogin(namaLengkap, username, password,
+                      alamat, nisn, nohp, email, tanggalLahir, jurusan)
                   .then((value) => {
                         if (value.status != false)
                           {
@@ -801,11 +793,11 @@ class _SignUpState extends State<SignUp> {
           child: ListView(
             children: [
               header(),
+              nisnInput(),
               fullNameInput(),
               usernameInput(),
               passwordInput(),
               alamatInput(),
-              kewarganegaraanInput(),
               noHpInput(),
               emailInput(),
               tanggalLahirInput(),

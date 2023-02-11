@@ -20,7 +20,7 @@ class _UbahProfileState extends State<UbahProfile> {
   final _namaLengkapController = TextEditingController();
   final _usernameController = TextEditingController();
   final _alamatController = TextEditingController();
-  final _kewarganegaraanController = TextEditingController();
+  final _nisnController = TextEditingController();
   final _noHpController = TextEditingController();
   final _emailController = TextEditingController();
   final _tanggalLahirController = TextEditingController();
@@ -28,8 +28,8 @@ class _UbahProfileState extends State<UbahProfile> {
 
   bool loading = false;
 
-  Future setPreferenProfile(namaLengkap, username, alamat, kewarganegaraan,
-      nohp, email, tanggalLahir, jurusan) async {
+  Future setPreferenProfile(namaLengkap, username, alamat, nisn, nohp, email,
+      tanggalLahir, jurusan) async {
     preferences = await SharedPreferences.getInstance();
     preferences.setString('namaLengkap', namaLengkap);
     preferences.setString('username', username);
@@ -37,7 +37,7 @@ class _UbahProfileState extends State<UbahProfile> {
     preferences.setString('nohp', nohp);
     preferences.setString('email', email);
     preferences.setString('tanggalLahir', tanggalLahir);
-    preferences.setString('kewarganegaraan', kewarganegaraan);
+    preferences.setString('nisn', nisn);
     preferences.setString('jurusan', jurusan);
     setState(() {
       namaLengkapUser = namaLengkap;
@@ -46,7 +46,7 @@ class _UbahProfileState extends State<UbahProfile> {
       nohpUser = nohp;
       emailUser = email;
       tanggalLahirUser = tanggalLahir;
-      kewarganegaraanUser = kewarganegaraan;
+      nisnUser = nisn;
       jurusanUser = jurusan;
     });
   }
@@ -56,7 +56,7 @@ class _UbahProfileState extends State<UbahProfile> {
     _namaLengkapController.text = namaLengkapUser;
     _usernameController.text = usernameUser;
     _alamatController.text = alamatUser;
-    _kewarganegaraanController.text = kewarganegaraanUser;
+    _nisnController.text = nisnUser;
     _noHpController.text = nohpUser;
     _emailController.text = emailUser;
     _tanggalLahirController.text = tanggalLahirUser;
@@ -239,14 +239,14 @@ class _UbahProfileState extends State<UbahProfile> {
       );
     }
 
-    Widget kewarganegaraanInput() {
+    Widget nisnInput() {
       return Container(
         margin: EdgeInsets.only(top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Kewarganegaraan',
+              'NISN',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -273,9 +273,9 @@ class _UbahProfileState extends State<UbahProfile> {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
-                        controller: _kewarganegaraanController,
+                        controller: _nisnController,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Masukan kewarganegaraan anda',
+                          hintText: 'Masukan NISN anda',
                           hintStyle: subtitleTextStyle,
                         ),
                       ),
@@ -516,7 +516,7 @@ class _UbahProfileState extends State<UbahProfile> {
             var namaLengkap = _namaLengkapController.text;
             var username = _usernameController.text;
             var alamat = _alamatController.text;
-            var kewarganegaraan = _kewarganegaraanController.text;
+            var nisn = _nisnController.text;
             var nohp = _noHpController.text;
             var email = _emailController.text;
             var tanggalLahir = _tanggalLahirController.text;
@@ -529,7 +529,7 @@ class _UbahProfileState extends State<UbahProfile> {
             if (namaLengkap != "" &&
                 username != "" &&
                 alamat != "" &&
-                kewarganegaraan != "" &&
+                nisn != "" &&
                 nohp != "" &&
                 email != "" &&
                 tanggalLahir != "" &&
@@ -539,7 +539,7 @@ class _UbahProfileState extends State<UbahProfile> {
                       namaLengkap,
                       username,
                       alamat,
-                      kewarganegaraan,
+                      nisn,
                       nohp,
                       email,
                       tanggalLahir,
@@ -594,7 +594,7 @@ class _UbahProfileState extends State<UbahProfile> {
                                                         namaLengkap,
                                                         username,
                                                         alamat,
-                                                        kewarganegaraan,
+                                                        nisn,
                                                         nohp,
                                                         email,
                                                         tanggalLahir,
@@ -766,10 +766,10 @@ class _UbahProfileState extends State<UbahProfile> {
           child: ListView(
             children: [
               header(),
+              nisnInput(),
               fullNameInput(),
               usernameInput(),
               alamatInput(),
-              kewarganegaraanInput(),
               noHpInput(),
               emailInput(),
               tanggalLahirInput(),

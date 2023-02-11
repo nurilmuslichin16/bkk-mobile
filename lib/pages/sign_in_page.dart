@@ -15,33 +15,33 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   SharedPreferences preferences;
 
-  final _usernameController = TextEditingController();
+  final _nisnController = TextEditingController();
 
   final _passwordController = TextEditingController();
 
   bool loading = false;
 
   Future setPreferenLogin(idPelamar, namaLengkap, username, alamat, nohp, email,
-      tanggalLahir, kewarganegaraan, jurusan) async {
+      tanggalLahir, nisn, jurusan) async {
     preferences = await SharedPreferences.getInstance();
     preferences.setString('idPelamar', idPelamar);
+    preferences.setString('nisn', nisn);
     preferences.setString('namaLengkap', namaLengkap);
     preferences.setString('username', username);
     preferences.setString('alamat', alamat);
     preferences.setString('nohp', nohp);
     preferences.setString('email', email);
     preferences.setString('tanggalLahir', tanggalLahir);
-    preferences.setString('kewarganegaraan', kewarganegaraan);
     preferences.setString('jurusan', jurusan);
     setState(() {
       idPelamarUser = idPelamar;
+      nisnUser = nisn;
       namaLengkapUser = namaLengkap;
       usernameUser = username;
       alamatUser = alamat;
       nohpUser = nohp;
       emailUser = email;
       tanggalLahirUser = tanggalLahir;
-      kewarganegaraanUser = kewarganegaraan;
       jurusanUser = jurusan;
     });
   }
@@ -70,14 +70,14 @@ class _SignInState extends State<SignIn> {
       );
     }
 
-    Widget usernameInput() {
+    Widget nisnInput() {
       return Container(
         margin: EdgeInsets.only(top: 70),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Username',
+              'NISN',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -104,9 +104,9 @@ class _SignInState extends State<SignIn> {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
-                        controller: _usernameController,
+                        controller: _nisnController,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Masukan username anda',
+                          hintText: 'Masukan NISN anda',
                           hintStyle: subtitleTextStyle,
                         ),
                       ),
@@ -179,15 +179,15 @@ class _SignInState extends State<SignIn> {
         child: TextButton(
           onPressed: () async {
             // Navigator.pushNamed(context, '/home');
-            var username = _usernameController.text;
+            var nisn = _nisnController.text;
             var password = _passwordController.text;
 
             setState(() {
               loading = true;
             });
 
-            if (username != "" && password != "") {
-              await LoginModel.postLogin(username, password).then((value) => {
+            if (nisn != "" && password != "") {
+              await LoginModel.postLogin(nisn, password).then((value) => {
                     if (value.status != false)
                       {
                         showDialog(
@@ -239,7 +239,7 @@ class _SignInState extends State<SignIn> {
                                                     value.nohp,
                                                     value.email,
                                                     value.tanggalLahir,
-                                                    value.kewarganegaraan,
+                                                    value.nisn,
                                                     value.jurusan)
                                                 .whenComplete(() =>
                                                     Navigator.of(context)
@@ -342,7 +342,7 @@ class _SignInState extends State<SignIn> {
                             const SizedBox(
                               height: 15,
                             ),
-                            Text("Username dan Password tidak boleh kosong!"),
+                            Text("NISN dan Password tidak boleh kosong!"),
                             const SizedBox(
                               height: 15,
                             ),
@@ -439,7 +439,7 @@ class _SignInState extends State<SignIn> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               header(),
-              usernameInput(),
+              nisnInput(),
               passwordInput(),
               signInButton(),
               Spacer(),

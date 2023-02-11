@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
     preferences.remove('nohp');
     preferences.remove('email');
     preferences.remove('tanggalLahir');
-    preferences.remove('kewarganegaraan');
+    preferences.remove('nisn');
     preferences.remove('jurusan');
     setState(() {
       idPelamarUser = null;
@@ -36,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
       nohpUser = null;
       emailUser = null;
       tanggalLahirUser = null;
-      kewarganegaraanUser = null;
+      nisnUser = null;
       jurusanUser = null;
     });
   }
@@ -334,7 +334,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     height: 6,
                   ),
                   Text(
-                    kewarganegaraanUser,
+                    nisnUser,
                     style: subtitleTextStyle.copyWith(fontWeight: light),
                     textAlign: TextAlign.justify,
                   ),

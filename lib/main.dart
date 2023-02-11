@@ -21,7 +21,7 @@ String alamatUser;
 String nohpUser;
 String emailUser;
 String tanggalLahirUser;
-String kewarganegaraanUser;
+String nisnUser;
 String jurusanUser;
 
 class MyApp extends StatefulWidget {
@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
     var getnohp = preferences.getString('nohp');
     var getemail = preferences.getString('email');
     var gettanggalLahir = preferences.getString('tanggalLahir');
-    var getkewarganegaraan = preferences.getString('kewarganegaraan');
+    var getnisn = preferences.getString('nisn');
     var getjurusan = preferences.getString('jurusan');
     setState(() {
       idPelamarUser = getidPelamar;
@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
       nohpUser = getnohp;
       emailUser = getemail;
       tanggalLahirUser = gettanggalLahir;
-      kewarganegaraanUser = getkewarganegaraan;
+      nisnUser = getnisn;
       jurusanUser = getjurusan;
     });
   }

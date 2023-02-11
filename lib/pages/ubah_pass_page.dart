@@ -33,7 +33,7 @@ class _UbahPasswordState extends State<UbahPassword> {
     preferences.remove('nohp');
     preferences.remove('email');
     preferences.remove('tanggalLahir');
-    preferences.remove('kewarganegaraan');
+    preferences.remove('nisn');
     preferences.remove('jurusan');
     setState(() {
       idPelamarUser = null;
@@ -43,7 +43,7 @@ class _UbahPasswordState extends State<UbahPassword> {
       nohpUser = null;
       emailUser = null;
       tanggalLahirUser = null;
-      kewarganegaraanUser = null;
+      nisnUser = null;
       jurusanUser = null;
     });
   }
@@ -245,7 +245,7 @@ class _UbahPasswordState extends State<UbahPassword> {
             if (passBaru == passKonfirm) {
               if (passLama != "" && passBaru != "" && passKonfirm != "") {
                 await UbahPassModel.postUbahPassword(
-                        usernameUser, passLama, passBaru)
+                        nisnUser, passLama, passBaru)
                     .then((value) => {
                           if (value.status != false)
                             {
