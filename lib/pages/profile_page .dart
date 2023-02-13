@@ -90,11 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(
-              top: 20,
-              left: 20,
-              right: 20,
-            ),
+            margin: EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
             child: GestureDetector(
               onTap: () async {
                 setState(() {
